@@ -1,9 +1,23 @@
+import pandas as pd
+import numpy as np
+from dataVisualization import *
+from dataPreparation import *
 
-def print_hi(name):
-    print(f'Hi, {name}')
+df = pd.read_csv("Data/BooksDataset.csv", usecols=["Title", "Description", "Authors", "Category"])
 
+showData(df)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+print("\n------------")
+print("Pulizia dataset")
+cleanData(df)
+print("------------")
+
+replacementList = [
+    ("Religious", "Religion"),
+    ("Christian Life", "Religion"),
+    ("Historical", "History"),
+    ("Family", "Family & Relationships"),
+    ("Pets", "Animal")
+]
+renameCategories(df, replacementList)
 

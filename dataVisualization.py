@@ -5,12 +5,12 @@ pd.set_option("display.max_columns", None)      # Mostrare tutte le colonne
 pd.set_option("display.width", None)            # Non tornare a capo quando stampa
 
 def showData(dataframe):
-    to_show = 10
-    print(f"Prime {to_show} righe:\n")
-    print(dataframe.head(to_show))
-
-    print("\nInformazioni generali sul dataframe:\n")
+    print("Informazioni generali sul dataframe:\n")
     print(dataframe.info())
+
+    to_show = 10
+    print(f"\nPrime {to_show} righe:\n")
+    print(dataframe.head(to_show))
 
     len_threshold = 40
     null_rows = len(dataframe[ dataframe.isna().any(axis=1) ])

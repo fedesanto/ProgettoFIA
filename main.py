@@ -5,6 +5,7 @@ nltk.data.path.append("nltk_data")
 
 from dataVisualization import *
 from dataPreparation import *
+from dataModelling import  *
 
 
 df = pd.read_csv("Data/BooksDataset.csv", usecols=["Title", "Description", "Authors", "Category"])
@@ -61,3 +62,17 @@ print("------------")
 
 showData(df)
 
+
+
+
+
+
+
+
+
+
+print("\n------------")
+trainClusters(df,"KMeans")
+trainClusters(df,"MiniBatchKMeans")
+trainClusters(df,"SpectralClustering")
+print("------------")

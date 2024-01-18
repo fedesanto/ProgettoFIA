@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import nltk
-nltk.data.path.append("nltk_data")
+nltk.data.path.append("nltk_data")  # Necessario per indicare alla libreria "nltk" dove si trovano i dati di cui ha bisogno
 
 from dataVisualization import *
 from dataPreparation import *
@@ -10,14 +10,17 @@ from dataModelling import  *
 
 df = pd.read_csv("Data/BooksDataset.csv", usecols=["Title", "Description", "Authors", "Category"])
 
-showData(df)
+# Mostro alcune informazioni del dataset iniziale
+showData(df, save_plot="dati_iniziali")
 
-print("\n------------")
+# Ripulisco il dataset
+print("\n---------------------------------------------")
 print("Pulizia dataset")
 cleanData(df)
-print("------------")
+print("---------------------------------------------")
 
-print("\n------------")
+# Rinomino categorie per accorparle in altre simili
+print("\n---------------------------------------------")
 replacementList = [
     ("Religious", "Religion"),
     ("Christian Life", "Religion"),
@@ -30,9 +33,10 @@ for replacement in replacementList:
     print(f"{replacement[0]} -> {replacement[1]}")
 
 renameCategories(df, replacementList)
-print("------------")
+print("---------------------------------------------")
 
-print("\n------------")
+# Estraggo i libri delle sole categorie di cui sono interessato
+print("\n---------------------------------------------")
 extractList = ["Religion", "Romance", "Cooking", "History",
                "Business & Economics", "Thrillers", "Mystery & Detective",
                "Health & Fitness", "Art",  "Sports & Recreation", "Travel",
@@ -42,26 +46,41 @@ for category in extractList:
     print(category)
 
 extractCategories(df, extractList)
-print("------------")
+print("---------------------------------------------")
 
-print("\n------------")
+# Bilancio il dataset eliminando righe di categorie troppo frequenti
+print("\n---------------------------------------------")
 print("Bilanciamento del dataset")
 balanceCategories(df, 2800)
-print("------------")
+print("---------------------------------------------")
 
-print("\n------------")
-description_stopwords = stopwords.words('english') + ["life", "book", "one", "new", "time", "world", "find"]
+# Preprocesso i campi "Description" e "Authors" per renderli più puliti. Inoltre creo dei wordcloud prima e dopo avere processati i campi
+print("\n---------------------------------------------")
+description_stopwords = stopwords.words('english') + ["life", "book", "one", "new", "time", "world", "find", "using", "use"]
 authors_stopwords = ["book", "books", "editor", "editors", "mr", "mrs", "dr", "jr", "magazine", "and"]
 
+print("Creo il wordcloud delle descrizioni...")
+createDescriptionWordCloud(df, save_file="wordcloud_descrizioni_nonprocessate")
 print("Preprocessing delle descrizioni...")
 preprocessDescription(df, description_stopwords)
+print("Creo il wordcloud delle descrizioni...")
+createDescriptionWordCloud(df, save_file="wordcloud_descrizioni_processate")
 
+print("\nCreo il wordcloud degli autori...")
+createAuthorsWordCloud(df, save_file="wordcloud_autori_nonprocessati")
 print("Preprocessing degli autori...")
 preprocessAuthors(df, authors_stopwords)
-print("------------")
+print("Creo il wordcloud degli autori...")
+createAuthorsWordCloud(df, save_file="wordcloud_autori_processati")
 
-showData(df)
+print()
+cleanData(df, des_threshold = 20)
+print("---------------------------------------------")
 
+# Rimostro informazioni generali sul dataset dopo che è stato preparato
+print("\n---------------------------------------------")
+showData(df, save_plot="dati_postprocessati")
+print("---------------------------------------------")
 
 
 

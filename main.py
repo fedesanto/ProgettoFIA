@@ -62,18 +62,18 @@ description_stopwords = stopwords.words('english') + ["life", "book", "one", "ne
 authors_stopwords = ["book", "books", "editor", "editors", "mr", "mrs", "dr", "jr", "magazine", "and"]
 
 print("Creo il wordcloud delle descrizioni...")
-#createDescriptionWordCloud(df, save_file="wordcloud_descrizioni_nonprocessate")
+createDescriptionWordCloud(df, save_file="wordcloud_descrizioni_nonprocessate")
 print("Preprocessing delle descrizioni...")
 preprocessDescription(df, description_stopwords)
 print("Creo il wordcloud delle descrizioni...")
-#createDescriptionWordCloud(df, save_file="wordcloud_descrizioni_processate")
+createDescriptionWordCloud(df, save_file="wordcloud_descrizioni_processate")
 
 print("\nCreo il wordcloud degli autori...")
-#createAuthorsWordCloud(df, save_file="wordcloud_autori_nonprocessati")
+createAuthorsWordCloud(df, save_file="wordcloud_autori_nonprocessati")
 print("Preprocessing degli autori...")
 preprocessAuthors(df, authors_stopwords)
 print("Creo il wordcloud degli autori...")
-#createAuthorsWordCloud(df, save_file="wordcloud_autori_processati")
+createAuthorsWordCloud(df, save_file="wordcloud_autori_processati")
 
 print()
 cleanData(df, des_threshold = 20)
@@ -93,13 +93,21 @@ print("\n---------------------------------------------")
 
 
 
-print("\n------------")
-print("Addestrando il modello...")
-model = trainClusters(df[["Description","Authors"]],"KMeans",returnFitTime = False)
+print("\n---------------------------------------------")
+
+print("Addestrando il modello KMeans...")
+model,time = trainClusters(df[["Description","Authors"]],"KMeans")
+print(f"Addestramento completato, tempo impiegato: {time}s")
 clusterAnalysis(df[["Description","Authors"]], model)
 
-""""
-trainClusters(df,"MiniBatchKMeans")
-trainClusters(df,"SpectralClustering")
-"""
-print("------------")
+print("Addestrando il modello MiniBatchKMeans...")
+model,time = trainClusters(df[["Description","Authors"]],"MiniBatchKMeans")
+print(f"Addestramento completato, tempo impiegato: {time}s")
+clusterAnalysis(df[["Description","Authors"]], model)
+
+print("Addestrando il modello SpectralClustering...")
+model,time = trainClusters(df[["Description","Authors"]],"SpectralClustering")
+print(f"Addestramento completato, tempo impiegato: {time}s")
+clusterAnalysis(df[["Description","Authors"]], model)
+
+print("\n---------------------------------------------")

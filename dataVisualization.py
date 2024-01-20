@@ -9,7 +9,7 @@ def showData(dataframe, save_plot=None):
     """
         Funzione per visualizzare un dataframe e ricavare informazioni su di esso. Saranno stampate a video, in successione:
             1) Informazioni generali (numero di colonne, etichette delle colonne, tipo dei dati contenuti nelle colonne,
-                                      range degli indici, valori non nulli e memoria utlizzata)
+               range degli indici, valori non nulli e memoria utlizzata)
             2) Le prime 10 righe
             3) Il numero di righe con almeno un valore nullo
             4) Il numero di righe identiche
@@ -20,8 +20,8 @@ def showData(dataframe, save_plot=None):
         Parametri:
             - dataframe, dataframe da analizzare
             - save_plot, se questo parametro viene impostato verrà memorizzato, all 'interno della directory "/Plots",
-                         un grafico sotto forma di .png che mostra il numero di libri delle categorie più frequenti nel dataframe.
-                         Il file creato potrà essere identificato come "save_plot".png
+              un grafico sotto forma di .png che mostra il numero di libri delle categorie più frequenti nel dataframe.
+              Il file creato potrà essere identificato come "save_plot".png
     """
 
     print("Informazioni generali sul dataframe:\n")

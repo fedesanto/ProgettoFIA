@@ -7,6 +7,8 @@ from dataVisualization import *
 from dataPreparation import *
 from dataModelling import  *
 
+from sklearn.model_selection import train_test_split
+
 
 df = pd.read_csv("Data/BooksDataset.csv", usecols=["Title", "Description", "Authors", "Category"])
 
@@ -83,7 +85,8 @@ showData(df, save_plot="dati_postprocessati")
 print("---------------------------------------------")
 
 
-
+# Addestramento dei modelli di classificazione
+print("\n---------------------------------------------")
 
 
 

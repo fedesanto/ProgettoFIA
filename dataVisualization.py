@@ -16,6 +16,7 @@ def showData(dataframe, save_plot=None):
             5) Il numero di righe con descrizioni non significative (meno di 40 caratteri)
             6) Il numero totale di categorie differenti
             7) Le 20 categorie più presenti
+            8) Se save_plot è diverso da 'None', viene creato un plot riportate il numero di libri per ciascuna delle 20 categorie più presenti
 
         Parametri:
             - dataframe, dataframe da analizzare

@@ -12,9 +12,6 @@ from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering
 from sklearn.metrics import silhouette_score, accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 from sklearn.model_selection import RandomizedSearchCV
 
-from sklearn.decomposition import PCA
-import seaborn as sns
-
 from time import time
 
 def trainClusters(X, model, findBestEstimator = False, returnFitTime = True):
@@ -30,7 +27,7 @@ def trainClusters(X, model, findBestEstimator = False, returnFitTime = True):
     """
 
     description_vect = TfidfVectorizer()
-    authors_vect = TfidfVectorizer(ngram_range=(1, 2))
+    authors_vect = TfidfVectorizer()
     colTransformer = ColumnTransformer([
         ('des_transformer', description_vect, "Description"),
         ('aut_transformer', authors_vect, "Authors")
@@ -237,8 +234,3 @@ def clusterAnalysis(X,model,n_terms=10):
     for i, r in data.iterrows():
         print(f'\nCluster {i}')
         print(','.join([terms[t] for t in np.argsort(r)][::-1][:n_terms]))  # per ogni riga del dataframe, trova gli n termini che hanno il punteggio più alto
-
-    # inizializziamo la PCA con 2 componenti
-    pca = PCA(n_components=2, random_state=42)
-    # passiamo alla pca il nostro array X
-    pca_vecs = pca.fit_transform(X_transformed.toarray())

@@ -147,19 +147,14 @@ print("---------------------------------------------")
 print("\n---------------------------------------------")
 print("Addestramento dei modelli di clustering\n")
 
-print("Addestrando il modello KMeans...")
-model,time = trainClusters(df[["Description","Authors"]],"KMeans")
-print(f"Addestramento completato, tempo impiegato: {time}s")
-clusterAnalysis(df[["Description","Authors"]], model)
+model_names = ["KMeans", "MiniBatchKMeans", "SpectralClustering"]
 
-print("Addestrando il modello MiniBatchKMeans...")
-model,time = trainClusters(df[["Description","Authors"]],"MiniBatchKMeans")
-print(f"Addestramento completato, tempo impiegato: {time}s")
-clusterAnalysis(df[["Description","Authors"]], model)
-
-print("Addestrando il modello SpectralClustering...")
-model,time = trainClusters(df[["Description","Authors"]],"SpectralClustering")
-print(f"Addestramento completato, tempo impiegato: {time}s")
-clusterAnalysis(df[["Description","Authors"]], model)
+print("Addestramento dei modelli di clustering")
+for model_name in model_names:
+    print(f"\nAddestramento del modello {model_name}...")
+    model, fitTime = trainClusters(df[["Description","Authors"]],model_name)
+    print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
+    print("\nAnalisi del modello...\n")
+    clusterAnalysis(df[["Description","Authors"]], model)
 
 print("\n---------------------------------------------")

@@ -122,8 +122,21 @@ print("---------------------------------------------")
 
 
 
-print("\n------------")
-trainClusters(df,"KMeans")
-trainClusters(df,"MiniBatchKMeans")
-trainClusters(df,"SpectralClustering")
-print("------------")
+print("\n---------------------------------------------")
+
+print("Addestrando il modello KMeans...")
+model,time = trainClusters(df[["Description","Authors"]],"KMeans")
+print(f"Addestramento completato, tempo impiegato: {time}s")
+clusterAnalysis(df[["Description","Authors"]], model)
+
+print("Addestrando il modello MiniBatchKMeans...")
+model,time = trainClusters(df[["Description","Authors"]],"MiniBatchKMeans")
+print(f"Addestramento completato, tempo impiegato: {time}s")
+clusterAnalysis(df[["Description","Authors"]], model)
+
+print("Addestrando il modello SpectralClustering...")
+model,time = trainClusters(df[["Description","Authors"]],"SpectralClustering")
+print(f"Addestramento completato, tempo impiegato: {time}s")
+clusterAnalysis(df[["Description","Authors"]], model)
+
+print("\n---------------------------------------------")

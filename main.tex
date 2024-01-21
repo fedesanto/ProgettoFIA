@@ -6,26 +6,24 @@
 \usepackage{enumitem}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx} % Required for inserting images
-
+\usepackage{tocloft}
 \usepackage[table]{xcolor}
-
+\usepackage{ragged2e}
 
 \setlength{\arrayrulewidth}{0.5mm}
 \setlength{\tabcolsep}{10pt}
 \renewcommand{\arraystretch}{2.5}
 
+\usepackage{longtable}
 \definecolor{lightblue}{HTML}{b0c4de}
 \definecolor{lightsteelblue}{HTML}{add8e6}
 
 \usepackage{hyperref}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 \begin{document}
 
 %pagina introduttiva
-
 \begin{titlepage}
     \begin{flushright}
         \textbf{Corso di Fondamenti di Intelligenza Artificiale}
@@ -56,68 +54,135 @@
 \end{flushright}
 \rule{\linewidth}{1pt}
 
-
+\renewcommand{\contentsname}{}
+\tableofcontents
 
 %1
 \clearpage
 \setcounter{section}{0}
 \section{Introduzione}
     \begin{enumerate}
-        \item Scopo del progetto
-    \end{enumerate}
-    \begin{flushleft}
+    \subsection{Scopo del progetto}
+    \begin{justify}
     
         Il nostro progetto si pone come obiettivo lo studio e la sperimentazione di differenti tecniche di Machine Learning capaci di analizzare ed estrarre informazioni da dati sotto forma di linguaggio naturale. Nello specifico si è interessati alla categorizzazione di libri tramite una breve descrizione testuale ed un elenco di autori. La categorizzazione è stata elaborata tramite due tecniche di Machine Learning, Classificazione e Clustering, che, seppur facenti utilizzo di due approcci diversi (rispettivamente apprendimento supervisionato e apprendimento non supervisionato), in linea teorica dovrebbero essere in grado di riportare risultati similari e confrontabili. A tal proposito occorrerà addestrare più modelli differenti per entrambe le tecniche e verificare quali di questi permette di ottenere il miglior risultato.
-        
-    \end{flushleft}
+
+    \end{justify}
+    \end{enumerate}
+
 \section{Specifiche del progetto}
     \begin{enumerate}
-        \item Ambiente: PEAS
-    \end{enumerate}
+        \subsection{Ambiente: PEAS}
     \begin{flushleft}
         Specifica PEAS
     \end{flushleft}
    
 %tabella
-%\href{https://www.overleaf.com/}{Specifiche del progetto}
-    \begin{table}[ht]
     \centering
-    \rowcolors{2}{lightblue}{lightsteelblue}
-    \begin{tabular}{ | p{3cm} | p{9cm} | }
-    \hline
-    \multicolumn{2}{|c|}{PEAS} \\
-    \hline
+    \begin{longtable}{ | p{3cm} | p{11cm} | }\hline
+    \multicolumn{2}{|c|}{PEAS} \\ \hline
+    \rowcolor{lightblue}
     Performance & La misura di prestazione è la capacità di avvicinarsi quanto più possibile al corretto genere del libro in questione. È necessario utilizzare misure di prestazione differenti per valutare Classificazione e Clustering. Nel caso della Classificazione si è usato: Accuratezza, Report di classificazione, che comprendono Precisione, Recall e F1-score per ciascuna classe, e una Matrice di  confusione. Per il clustering, invece,  si è utilizzato il Silhouette Score.\\
     \hline
-    Environment & I nostri modelli sono stati realizzati e operano nell'ambiente di sviluppo PyCharm il quale presenta le seguenti caratteristiche: \begin{itemize}
-        \item completamente osservabile: il modello ha la visione completa del dataset e degli attributi associati a ciascun libro.
-        \item deterministico: una volta addestrato un modello, la variazione dello stato dell'ambiente rimane la stessa a fronte degli stessi input.
-        \item episodico: l'agente delibera a fronte di determinati episodi che consistono in nuove richieste di predizione.
-        \item statico: l'ambiente resta invariato mentre l'agente opera.
-        \item discreto: viene fornito un insieme discreto di informazioni per ciascun libro.
-        \item singolo: l'ambiente permette di addestrare più modelli ma questi vengono valutati singolarmente.
+    \rowcolor{lightsteelblue}
+    \textbf{Environment} & I nostri modelli sono stati realizzati e operano nell'ambiente di sviluppo PyCharm il quale presenta le seguenti caratteristiche: \begin{itemize}
+        \item \textbf{completamente osservabile}: il modello ha la visione completa del dataset e degli attributi associati a ciascun libro.
+        \item \textbf{deterministico}: una volta addestrato un modello, la variazione dello stato dell'ambiente rimane la stessa a fronte degli stessi input.
+        \item \textbf{episodico}: l'agente delibera a fronte di determinati episodi che consistono in nuove richieste di predizione.
+        \item \textbf{statico}: l'ambiente resta invariato mentre l'agente opera.
+        \item \textbf{discreto}: viene fornito un insieme discreto di informazioni per ciascun libro.
+        \item \textbf{singolo}: l'ambiente permette di addestrare più modelli ma questi vengono valutati singolarmente.
     \end{itemize}
+    \hline
+    \rowcolor{lightblue}
+    \textbf{Actuators} & Gli agenti mostrano i risultati attraverso due tipi di attuatori: \begin{itemize}
+    \item console dell'ambiente di sviluppo: durante l'addestramento e testing i modelli riportano informazioni di controllo e i risultati ottenuti.
+    \item grafici esplicativi: mostrano informazioni di vario tipo, tra cui analisi del dataset e risultati ottenuti dalle predizioni dei modelli.\end{itemize}
+    \hline
+    \rowcolor{lightsteelblue}
+    \textbf{Sensors} & I modelli ricevono le informazioni necessarie per l'addestramento tramite un file contenente il dataset. Inoltre è possibile specificare tramite console nuovi dati su cui effetturare nuove predizioni. \\
+    \hline
     
-    -completamente osservabile: il modello ha la visione completa del dataset e degli attributi associati a ciascun libro.
-    -deterministico: una volta addestrato un modello, la variazione dello stato dell'ambiente rimane la stessa a fronte degli stessi input.
-    -episodico: l'agente delibera a fronte di determinati episodi che consistono in nuove richieste di predizione.
-    -statico: l'ambiente resta invariato mentre l'agente opera.
-    -discreto: viene fornito un insieme discreto di informazioni per ciascun libro.
-    -singolo: l'ambiente permette di addestrare più modelli ma questi vengono valutati singolarmente.
-    
-    \hline
-    Actuators& Gli agenti mostrano i risultati attraverso due tipi di attuatori:  %elenco
-    -console dell'ambiente di sviluppo: durante l'addestramento e testing i modelli riportano informazioni di controllo e i risultati ottenuti
-    -grafici esplicativi: mostrano informazioni di vario tipo, tra cui analisi del dataset e risultati ottenuti dalle predizioni dei modelli.\\
-    \hline
-    Sensors& I modelli ricevono le informazioni necessarie per l'addestramento tramite un file contenente il dataset. Inoltre è possibile specificare tramite console nuovi dati su cui effetturare nuove predizioni. \\
-    \hline
-    \end{tabular}
-
-\caption{Tabella della specifica PEAS}
+    \end{longtable}
+   \caption{Tabella della specifica PEAS}
 \label{table:ta}
+\end{enumerate}
 
-\end{table}
+    \begin{enumerate}
+    \subsection{Analisi del problema}
+    \begin{justify}
+    
+    \end{justify}
+    \end{enumerate}
+
+\section{Analisi e preparazione dei dati}
+    \begin{enumerate}
+    \subsection{Scelta del dataset}
+    \begin{justify}
+    Per lo scopo di tale progetto si è scelto un dataset già esistente, reperibile \href{https://www.kaggle.com/datasets/elvinrustam/books-dataset}{qui}. La ricerca del dataset si è basata sulla necessità di trovarne uno contenente film provveduti di descrizione e autori. Il dataset fornisce informazioni relative a 103063 libri ed ha una dimensione di 69.75MB. Inizialmente presentava 7 features diverse: Title, Authors, Description, Category, Publisher, Publish Date, Price. Tutti i dati sono in formato testuale.
+    \end{justify}
+    \end{enumerate}
+
+    \begin{enumerate}
+    \subsection{Data cleaning}
+    \begin{justify}
+    
+    \end{justify}
+    \end{enumerate}
+
+    \begin{enumerate}
+    \subsection{Bilanciamento dataset}
+    \end{enumerate}
+
+    \begin{enumerate}
+    \subsection{Visualizzazione Word Cloud}
+    \end{enumerate}
+
+    \begin{enumerate}
+    \subsection{Formattazione dei dati}
+    \end{enumerate}
+
+
+\section{Classificazione}
+    \begin{enumerate}
+    \subsection{Support Vector Classification}
+    \end{enumerate}
+   
+    \begin{enumerate}
+    \subsection{Mulinomial Classification}
+    \end{enumerate}
+    
+    \begin{enumerate}
+    \subsection{Logistic Classification}
+    \end{enumerate}
+
+    \begin{enumerate}
+    \subsection{SGD Classification}
+    \end{enumerate}
+    
+    \begin{enumerate}
+    \subsection{Valutazione della Classificazione}
+    \end{enumerate}
+
+
+\section{Clustering}
+    \begin{enumerate}
+    \subsection{Algoritmo K-Means}
+    \end{enumerate}
+
+    \begin{enumerate}
+    \subsection{Algoritmo MiniBatchKMean}
+    \end{enumerate}
+
+    \begin{enumerate}
+    \subsection{Algoritmo SpectralClustering}
+    \end{enumerate}
+
+    \begin{enumerate}
+    \subsection{Valutazione del Clustering: Silhouette score}
+    \end{enumerate}
+
+\section{Conclusioni}
 
     
 \end{document}

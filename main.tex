@@ -1,0 +1,123 @@
+\documentclass[12pt,oneside]{article}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{a4wide}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} % Required for inserting images
+
+\usepackage[table]{xcolor}
+
+
+\setlength{\arrayrulewidth}{0.5mm}
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{2.5}
+
+\definecolor{lightblue}{HTML}{b0c4de}
+\definecolor{lightsteelblue}{HTML}{add8e6}
+
+\usepackage{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%pagina introduttiva
+
+\begin{titlepage}
+    \begin{flushright}
+        \textbf{Corso di Fondamenti di Intelligenza Artificiale}
+        \textbf{\\Università degli Studi di Salerno}
+    \end{flushright}
+    \vspace*{1.5cm}
+    \centering
+    \includegraphics[width=0.4\textwidth]{logoUNISA.png}
+    \vfill
+    \Huge\textbf{BOOKS}
+    \vspace{1ex}
+    \rule{\linewidth}{1pt}
+    \Large\textbf{Maria Angela Mancuso \\
+        Ines Malfettone \\
+        Federico Santonicola \\
+        Attilio Sessa}
+    \vfill
+    \today
+\end{titlepage}
+
+%indice
+\clearpage %crea nuova pagina
+
+\setcounter{page}{1}
+
+\begin{flushright}
+        \Large\textbf{Indice}
+\end{flushright}
+\rule{\linewidth}{1pt}
+
+
+
+%1
+\clearpage
+\setcounter{section}{0}
+\section{Introduzione}
+    \begin{enumerate}
+        \item Scopo del progetto
+    \end{enumerate}
+    \begin{flushleft}
+    
+        Il nostro progetto si pone come obiettivo lo studio e la sperimentazione di differenti tecniche di Machine Learning capaci di analizzare ed estrarre informazioni da dati sotto forma di linguaggio naturale. Nello specifico si è interessati alla categorizzazione di libri tramite una breve descrizione testuale ed un elenco di autori. La categorizzazione è stata elaborata tramite due tecniche di Machine Learning, Classificazione e Clustering, che, seppur facenti utilizzo di due approcci diversi (rispettivamente apprendimento supervisionato e apprendimento non supervisionato), in linea teorica dovrebbero essere in grado di riportare risultati similari e confrontabili. A tal proposito occorrerà addestrare più modelli differenti per entrambe le tecniche e verificare quali di questi permette di ottenere il miglior risultato.
+        
+    \end{flushleft}
+\section{Specifiche del progetto}
+    \begin{enumerate}
+        \item Ambiente: PEAS
+    \end{enumerate}
+    \begin{flushleft}
+        Specifica PEAS
+    \end{flushleft}
+   
+%tabella
+%\href{https://www.overleaf.com/}{Specifiche del progetto}
+    \begin{table}[ht]
+    \centering
+    \rowcolors{2}{lightblue}{lightsteelblue}
+    \begin{tabular}{ | p{3cm} | p{9cm} | }
+    \hline
+    \multicolumn{2}{|c|}{PEAS} \\
+    \hline
+    Performance & La misura di prestazione è la capacità di avvicinarsi quanto più possibile al corretto genere del libro in questione. È necessario utilizzare misure di prestazione differenti per valutare Classificazione e Clustering. Nel caso della Classificazione si è usato: Accuratezza, Report di classificazione, che comprendono Precisione, Recall e F1-score per ciascuna classe, e una Matrice di  confusione. Per il clustering, invece,  si è utilizzato il Silhouette Score.\\
+    \hline
+    Environment & I nostri modelli sono stati realizzati e operano nell'ambiente di sviluppo PyCharm il quale presenta le seguenti caratteristiche: \begin{itemize}
+        \item completamente osservabile: il modello ha la visione completa del dataset e degli attributi associati a ciascun libro.
+        \item deterministico: una volta addestrato un modello, la variazione dello stato dell'ambiente rimane la stessa a fronte degli stessi input.
+        \item episodico: l'agente delibera a fronte di determinati episodi che consistono in nuove richieste di predizione.
+        \item statico: l'ambiente resta invariato mentre l'agente opera.
+        \item discreto: viene fornito un insieme discreto di informazioni per ciascun libro.
+        \item singolo: l'ambiente permette di addestrare più modelli ma questi vengono valutati singolarmente.
+    \end{itemize}
+    
+    -completamente osservabile: il modello ha la visione completa del dataset e degli attributi associati a ciascun libro.
+    -deterministico: una volta addestrato un modello, la variazione dello stato dell'ambiente rimane la stessa a fronte degli stessi input.
+    -episodico: l'agente delibera a fronte di determinati episodi che consistono in nuove richieste di predizione.
+    -statico: l'ambiente resta invariato mentre l'agente opera.
+    -discreto: viene fornito un insieme discreto di informazioni per ciascun libro.
+    -singolo: l'ambiente permette di addestrare più modelli ma questi vengono valutati singolarmente.
+    
+    \hline
+    Actuators& Gli agenti mostrano i risultati attraverso due tipi di attuatori:  %elenco
+    -console dell'ambiente di sviluppo: durante l'addestramento e testing i modelli riportano informazioni di controllo e i risultati ottenuti
+    -grafici esplicativi: mostrano informazioni di vario tipo, tra cui analisi del dataset e risultati ottenuti dalle predizioni dei modelli.\\
+    \hline
+    Sensors& I modelli ricevono le informazioni necessarie per l'addestramento tramite un file contenente il dataset. Inoltre è possibile specificare tramite console nuovi dati su cui effetturare nuove predizioni. \\
+    \hline
+    \end{tabular}
+
+\caption{Tabella della specifica PEAS}
+\label{table:ta}
+
+\end{table}
+
+    
+\end{document}

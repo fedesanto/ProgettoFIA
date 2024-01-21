@@ -1,13 +1,24 @@
 import pandas as pd
 import numpy as np
-import nltk
-nltk.data.path.append("nltk_data")  # Necessario per indicare alla libreria "nltk" dove si trovano i dati di cui ha bisogno
-
-from dataVisualization import *
-from dataPreparation import *
-from dataModelling import  *
+import os
+import warnings
 
 from sklearn.model_selection import train_test_split
+from dataVisualization import *
+from dataPreparation import *
+from dataModelling import *
+
+pd.set_option("display.max_columns", None)      # Mostra tutte le colonne quando stampi il dataframe
+pd.set_option("display.width", None)            # Non tornare a capo quando stampi il dataframe
+
+if not os.path.isdir("Plots"):      # Mi assicuro che la cartella "Plots" esista
+    os.mkdir("Plots")
+
+if not os.path.isdir("Models"):  # Mi assicuro che la cartella "Models" esista
+     os.mkdir("Models")
+
+# warnings.filterwarnings('ignore')  # Disabilito i warning
+
 
 
 df = pd.read_csv("Data/BooksDataset.csv", usecols=["Title", "Description", "Authors", "Category"])
@@ -89,40 +100,52 @@ print("---------------------------------------------")
 print("\n---------------------------------------------")
 X = df[["Description", "Authors"]]
 Y = df["Category"]
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=3, stratify=Y)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=3, stratify=Y)  # Suddivido i dati di addestramento da quelli di test
 
-model_names = ["LinearSVC", "LogisticRegression", "SGDClassifier", "MultinomialNB", "ComplementNB"]
+model_names = ["LinearSVC", "LogisticRegression", "SGDClassifier", "MultinomialNB", "ComplementNB"]  #Definisco i modelli che voglio addestrare
 models = {}
 
 print("Addestramento dei modelli di classificazione")
-for model_name in model_names:
+for model_name in model_names:      # Addesstro e valuto tutti i modelli specificati in "model_names"
     print(f"\nAddestramento del modello {model_name}...")
     model, fitTime = trainClassificator(X_train, Y_train, model=model_name, returnFitTime=True)
     print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
+
     print("\nTesting del modello...\n")
-    predictionTime = testClassificator(X_test, Y_test, model, returnPredictionTime=True,
-                                       saveConfusionMatrix=f"{model_name}_confusion_matrix")
-    print(f"\nPredizione effettuata in {round(predictionTime, 2)} secondi")
+    predictionTime = testClassificator(X_test, Y_test, model, returnPredictionTime=True, saveConfusionMatrix=f"{model_name}_confusion_matrix")
+    print(f"\nTesting concluso in {round(predictionTime, 2)} secondi")
 
     models[model_name] = model
 
 
 bestScore = 0
 best_model = None
-for model_name, model in models.items():
+for model_name, model in models.items():        # Determino qual è stato il miglior modello sulla base dell'accuracy score
     score = model.score(X_test, Y_test)
     if score > bestScore:
         bestScore = score
         best_model = model_name
 
-print(f"\nSecondo l'accuracy, il migliore modello è {best_model}, con uno score di {bestScore}")
+print(f"\nSecondo l'accuracy, il migliore modello è {best_model}, con uno score di {round(bestScore, 3)}")
+
+# Riaddestro il modello risultato migliore, identificandone la miglior configurazione di parametri per aumentarne ulteriormente il punteggio
+# L'addestramento e la successiva valutazione avverranno su un set differenti di dati rispetto all'addestramento precedente
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=89, stratify=Y)
+
+print(f"\nAddestramento di {best_model} ricercando i parametri migliori...")
+model, fitTime = trainClassificator(X_train, Y_train, model=best_model, returnFitTime=True, findBestEstimator=True, saveEstimator=f"{best_model}_best")
+print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
+
+print("\nTesting del modello...\n")
+predictionTime = testClassificator(X_test, Y_test, model, returnPredictionTime=True, saveConfusionMatrix=f"{best_model}_best_confusion_matrix")
+print(f"\nTesting concluso in {round(predictionTime, 2)} secondi")
 print("---------------------------------------------")
 
 
 
-
-
+# Addestramento dei modelli di clustering
 print("\n---------------------------------------------")
+print("Addestramento dei modelli di clustering\n")
 
 print("Addestrando il modello KMeans...")
 model,time = trainClusters(df[["Description","Authors"]],"KMeans")

@@ -1,11 +1,14 @@
 import pandas as pd
 import numpy as np
+import nltk
+
 from string import punctuation
 from nltk.stem import WordNetLemmatizer
 from nltk import word_tokenize
 from nltk.corpus import stopwords
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
+
+nltk.data.path.append("nltk_data")  # Necessario per indicare alla libreria "nltk" dove si trovano i dati di cui ha bisogno
+
 
 def cleanData(dataframe, des_threshold = 40):
     """

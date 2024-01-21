@@ -4,9 +4,6 @@ import matplotlib.pyplot as plt
 
 from wordcloud import WordCloud
 
-pd.set_option("display.max_columns", None)      # Mostra tutte le colonne quando stampi il dataframe
-pd.set_option("display.width", None)            # Non tornare a capo quando stampi il dataframe
-
 def showData(dataframe, save_plot=None):
     """
         Funzione per visualizzare un dataframe e ricavare informazioni su di esso. Saranno stampate a video, in successione:

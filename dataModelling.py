@@ -11,9 +11,9 @@ from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering
 from sklearn.metrics import silhouette_score, accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 from sklearn.model_selection import RandomizedSearchCV
-
 from sklearn.decomposition import PCA
-import seaborn as sns
+
+from joblib import dump, load
 
 from time import time
 
@@ -45,7 +45,7 @@ def trainClusters(X, model, findBestEstimator = False, returnFitTime = True):
     elif model == "SpectralClustering":
         modelPipe = Pipeline([('transformer', colTransformer), ('clt', SpectralClustering(n_clusters=K_clusters, random_state=42, n_init=5))])
     else:
-        raise Exception("Inserisci il nome di un modello valido, a scelta tra: KMeans, MiniBatchKMeans e SpectralClustering")
+        raise ValueError("Inserisci il nome di un modello valido, a scelta tra: KMeans, MiniBatchKMeans e SpectralClustering")
 
     if findBestEstimator:
         params = getModelParams(model)
@@ -70,15 +70,26 @@ def trainClusters(X, model, findBestEstimator = False, returnFitTime = True):
             return modelPipe
 
 
-def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator = False, returnFitTime = True):
+def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator = False, returnFitTime = True, saveEstimator = None):
+    """
+        Funzione che permette di addesstrare e restituire un modello di classificazione sulla base dei dati passati.
+
+        Parametri:
+            - X_train, pandas Dataframe comprendente le descrizioni e gli autori su cui il classificatore dovrà basarsi
+            - Y_train, pandas Series contenente le categorie da predirre
+            - model, stringa indicante il nome del modello di classificazione da addestrare (Uno tra LogisticRegression, SGDClassifier, MultinomialNB, LinearSVC, ComplementNB)
+            - findBestEstimator, se True la funzione addesstrerà più modelli con configurazioni differenti e restituirà il migliore, sulla base dell'accuracy ottenuta
+            - returnFitTime, se True la funzione restituisce anche il tempo impiegato per effettuare il fitting del modello
+            - saveEstimator, se diverso da None la funzione serializzerà all'interno del file "/Models/(saveEstimator).joblib" il classificatore addesstrato
+    """
     description_vect = TfidfVectorizer()
     authors_vect = TfidfVectorizer(ngram_range=(1, 2))
-    colTransformer = ColumnTransformer([
+    colTransformer = ColumnTransformer([                    # Creo il trasformatore delle colonne che mi permetterà di operare sui campi testuali
         ('des_transformer', description_vect, "Description"),
         ('aut_transformer', authors_vect, "Authors")
     ])
 
-    match model:
+    match model:    # A seconda del modello scelto, instanzio l'opportuna pipeline
         case "LogisticRegression":
             modelPipe = Pipeline([('transformer', colTransformer), ('clf', LogisticRegression(max_iter=1000))])
 
@@ -89,7 +100,7 @@ def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator 
             modelPipe = Pipeline([('transformer', colTransformer), ('clf', MultinomialNB())])
 
         case "LinearSVC":
-            modelPipe = Pipeline([('transformer', colTransformer), ('clf', LinearSVC())])
+            modelPipe = Pipeline([('transformer', colTransformer), ('clf', LinearSVC(dual="auto"))])
 
         case "ComplementNB":
             modelPipe = Pipeline([('transformer', colTransformer), ('clf', ComplementNB())])
@@ -97,30 +108,39 @@ def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator 
         case _:
             raise ValueError("Modello non riconosciuto o implementato")
 
-    if findBestEstimator:
+    if findBestEstimator:   #Se findBestEstimator = True, ricerco il "miglior" modello
         params = getModelParams(model)
-        rs = RandomizedSearchCV(modelPipe, params, cv=5)
+        rs = RandomizedSearchCV(modelPipe, params, cv=5, n_jobs=-1)
 
         start_time = time()
         rs.fit(X_train, Y_train)
         fitTime = time() - start_time
 
-        if returnFitTime:
-            return rs.best_estimator_, fitTime
-        else:
-            return rs.best_estimator_
-    else:
+        trainedModel = rs.best_estimator_
+    else:       # Altrimenti addesstro il modello con la configurazione di default
         startTime = time()
         modelPipe.fit(X_train, Y_train)
         fitTime = time() - startTime
 
-        if returnFitTime:
-            return modelPipe, fitTime
-        else:
-            return modelPipe
+        trainedModel = modelPipe
+
+    if saveEstimator:       # Se saveEstimator = True, serializzo il classificatore all'interno di un apposito file
+        dump(trainedModel, f"Models/{saveEstimator}.joblib")
+        print(f"Classificatore {model} serializzato all'interno del seguente file: /Models/{saveEstimator}.joblib")
+
+    if returnFitTime:
+        return trainedModel, fitTime
+    else:
+        return trainedModel
 
 
 def getModelParams(model):
+    """
+        Funzione che permette di restituire l'insieme dei parametri del modello indicato per effettuare la ricerca del miglior modello
+
+        Parametri:
+            model, stringa indicante il nome del modello (Uno tra LogisticRegression, SGDClassifier, MultinomialNB, LinearSVC, ComplementNB, KMeans, MiniBatchKMeans, SpectralClustering)
+    """
     match model:
         case "LogisticRegression":
             params ={"transformer__aut_transformer__ngram_range": [(1, 1), (1, 2), (2, 2)],
@@ -140,6 +160,10 @@ def getModelParams(model):
         case "MultinomialNB":
             params ={"transformer__aut_transformer__ngram_range": [(1, 1), (1, 2), (2, 2)]
                      }
+
+        case "ComplementNB":
+            params = {"transformer__aut_transformer__ngram_range": [(1, 1), (1, 2), (2, 2)]
+                      }
 
         case "LinearSVC":
             params = {"transformer__aut_transformer__ngram_range": [(1, 1), (1, 2), (2, 2)],
@@ -172,27 +196,46 @@ def getModelParams(model):
                       "clf__assign_labels": ["kmeans", "discretize", "cluster_qr"]
                       }
 
+        case _:
+            raise ValueError("Modello non riconosciuto o implementato")
 
     return params
 
 
 def testClassificator(X_test, Y_test, model, returnPredictionTime=True, saveConfusionMatrix=None):
+    """
+        Funzione che testa un modello di classificazione, sulla base di opportuni dati passati,
+        riportando i valori di metriche di valutazione della classificazione.
+        Nello specifico, viene stampato in successione:
+            1) Accuracy score
+            2) Classification report, comprendente i valori di precision, recall e f1-score per ciascuna delle classi predette
+            3) Se saveConfusionMatrix = True, viene memorizzato un plot della matrice di confusione
+
+        Parametri:
+            - X_test, pandas Dataframe delle descrizioni e autori dei libri da predirre
+            - Y_test, pandas Series delle categorie da predirre
+            - model, riferimeot al modello di classificazione da testare
+            - returnPredictionTime, se True la funzione restituise il tempo impiegato per calcolare le predizioni
+            - saveConfusionMatrix, se diverso da None, la funzione memorizza un plot della matrice di confusione all'interno del file "Models/(saveConfusionMatrix).joblib"
+    """
     startTime = time()
-    prediction = model.predict(X_test)
+    prediction = model.predict(X_test)      # Effettuo le predizioni sui dati passati
     predictionTime = time() - startTime
 
-    print("Accuracy score: ", round(accuracy_score(Y_test, prediction), 3))
-    print("Classification report:\n")
+    print("Accuracy score: ", round(accuracy_score(Y_test, prediction), 3))     # Calcolo accuracy score
+    print("Classification report:\n")                                           # Stampo classification report
     print(classification_report(Y_test, prediction, zero_division=0))
 
-    if saveConfusionMatrix:
+    if saveConfusionMatrix:     # Se saveConfusionMatrix = True, creo il plot della matrice di confusione
         cm = confusion_matrix(Y_test, prediction, labels=model.classes_)
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
         disp.plot(xticks_rotation="vertical")
         fig = disp.figure_
-        fig.set_figwidth(12)
-        fig.set_figheight(12)
-        fig.suptitle('Matrice di confusione')
+        fig.set_figwidth(8)
+        fig.set_figheight(6)
+        fig.suptitle('Matrice di confusione', fontsize=15)
+        plt.ylabel('Categoria reale', fontsize=12)
+        plt.xlabel('Categoria predetta', fontsize=12)
         plt.savefig(f"Plots/{saveConfusionMatrix}.png")
         print(f"Memorizzata la matrice di confusione in: /Plots/{saveConfusionMatrix}.png")
 

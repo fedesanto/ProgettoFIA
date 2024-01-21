@@ -43,7 +43,7 @@ extractList = ["Religion", "Romance", "Cooking", "History",
                "Business & Economics", "Thrillers", "Mystery & Detective",
                "Health & Fitness", "Art",  "Sports & Recreation", "Travel",
                "Fantasy", "Science", "Animals", "Computers", "House & Home"]
-print("Estrazione dei libri appartenenti alle seguenti categoire:")
+print("Estrazione dei libri appartenenti alle seguenti categorie:")
 for category in extractList:
     print(category)
 
@@ -61,18 +61,18 @@ print("\n---------------------------------------------")
 description_stopwords = stopwords.words('english') + ["life", "book", "one", "new", "time", "world", "find", "using", "use"]
 authors_stopwords = ["book", "books", "editor", "editors", "mr", "mrs", "dr", "jr", "magazine", "and"]
 
-print("Creo il wordcloud delle descrizioni...")
+print("Creo il wordcloud delle descrizioni non processate...")
 createDescriptionWordCloud(df, save_file="wordcloud_descrizioni_nonprocessate")
 print("Preprocessing delle descrizioni...")
 preprocessDescription(df, description_stopwords)
-print("Creo il wordcloud delle descrizioni...")
+print("Creo il wordcloud delle descrizioni processate...")
 createDescriptionWordCloud(df, save_file="wordcloud_descrizioni_processate")
 
-print("\nCreo il wordcloud degli autori...")
+print("\nCreo il wordcloud degli autori non processati...")
 createAuthorsWordCloud(df, save_file="wordcloud_autori_nonprocessati")
 print("Preprocessing degli autori...")
 preprocessAuthors(df, authors_stopwords)
-print("Creo il wordcloud degli autori...")
+print("Creo il wordcloud degli autori processati...")
 createAuthorsWordCloud(df, save_file="wordcloud_autori_processati")
 
 print()
@@ -87,7 +87,36 @@ print("---------------------------------------------")
 
 # Addestramento dei modelli di classificazione
 print("\n---------------------------------------------")
+X = df[["Description", "Authors"]]
+Y = df["Category"]
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=3, stratify=Y)
 
+model_names = ["LinearSVC", "LogisticRegression", "SGDClassifier", "MultinomialNB", "ComplementNB"]
+models = {}
+
+print("Addestramento dei modelli di classificazione")
+for model_name in model_names:
+    print(f"\nAddestramento del modello {model_name}...")
+    model, fitTime = trainClassificator(X_train, Y_train, model=model_name, returnFitTime=True)
+    print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
+    print("\nTesting del modello...\n")
+    predictionTime = testClassificator(X_test, Y_test, model, returnPredictionTime=True,
+                                       saveConfusionMatrix=f"{model_name}_confusion_matrix")
+    print(f"\nPredizione effettuata in {round(predictionTime, 2)} secondi")
+
+    models[model_name] = model
+
+
+bestScore = 0
+best_model = None
+for model_name, model in models.items():
+    score = model.score(X_test, Y_test)
+    if score > bestScore:
+        bestScore = score
+        best_model = model_name
+
+print(f"\nSecondo l'accuracy, il migliore modello è {best_model}, con uno score di {bestScore}")
+print("---------------------------------------------")
 
 
 

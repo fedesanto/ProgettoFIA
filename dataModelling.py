@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import MultinomialNB, ComplementNB
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering
 from sklearn.metrics import silhouette_score, accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
@@ -65,7 +65,7 @@ def trainClusters(dataframe,model,n_terms=10):
 
 def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator = False, returnFitTime = True):
     description_vect = TfidfVectorizer()
-    authors_vect = TfidfVectorizer(ngram_range=(2, 2))
+    authors_vect = TfidfVectorizer(ngram_range=(1, 2))
     colTransformer = ColumnTransformer([
         ('des_transformer', description_vect, "Description"),
         ('aut_transformer', authors_vect, "Authors")
@@ -73,7 +73,7 @@ def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator 
 
     match model:
         case "LogisticRegression":
-            modelPipe = Pipeline([('transformer', colTransformer), ('clf', LogisticRegression())])
+            modelPipe = Pipeline([('transformer', colTransformer), ('clf', LogisticRegression(max_iter=1000))])
 
         case "SGDClassifier":
             modelPipe = Pipeline([('transformer', colTransformer), ('clf', SGDClassifier())])
@@ -81,8 +81,14 @@ def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator 
         case "MultinomialNB":
             modelPipe = Pipeline([('transformer', colTransformer), ('clf', MultinomialNB())])
 
-        case _:
+        case "LinearSVC":
             modelPipe = Pipeline([('transformer', colTransformer), ('clf', LinearSVC())])
+
+        case "ComplementNB":
+            modelPipe = Pipeline([('transformer', colTransformer), ('clf', ComplementNB())])
+
+        case _:
+            raise ValueError("Modello non riconosciuto o implementato")
 
     if findBestEstimator:
         params = getModelParams(model)
@@ -144,14 +150,17 @@ def testClassificator(X_test, Y_test, model, returnPredictionTime=True, saveConf
     predictionTime = time() - startTime
 
     print("Accuracy score: ", round(accuracy_score(Y_test, prediction), 3))
-    print("\nClassification report:\n")
-    print(classification_report(Y_test, prediction))
+    print("Classification report:\n")
+    print(classification_report(Y_test, prediction, zero_division=0))
 
     if saveConfusionMatrix:
         cm = confusion_matrix(Y_test, prediction, labels=model.classes_)
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
-        disp.plot()
-        plt.xticks(rotation=90)
+        disp.plot(xticks_rotation="vertical")
+        fig = disp.figure_
+        fig.set_figwidth(12)
+        fig.set_figheight(12)
+        fig.suptitle('Matrice di confusione')
         plt.savefig(f"Plots/{saveConfusionMatrix}.png")
         print(f"Memorizzata la matrice di confusione in: /Plots/{saveConfusionMatrix}.png")
 

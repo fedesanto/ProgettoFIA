@@ -120,6 +120,7 @@ def preprocessDescription(dataframe, stop_words = stopwords.words('english')):
             - dataframe, dataframe su cui effettuare l'operazione
             - stop_words, lista di stringhe rappresentanti le stopwords da eliminare
     """
+    newDescriptions = []
     for index, row in dataframe.iterrows():
         text = row["Description"]
 
@@ -133,7 +134,9 @@ def preprocessDescription(dataframe, stop_words = stopwords.words('english')):
         lemmatizer = WordNetLemmatizer()
         lemmed = [lemmatizer.lemmatize(word) for word in filtered_words]  # Lemming
 
-        dataframe["Description"].loc[index] = " ".join(lemmed)
+        newDescriptions.append(" ".join(lemmed))
+
+    dataframe["Description"] = newDescriptions
 
 
 def preprocessAuthors(dataframe, stop_words = []):
@@ -148,7 +151,7 @@ def preprocessAuthors(dataframe, stop_words = []):
             - dataframe, dataframe su cui effettuare l'operazione
             - stop_words, lista di stringhe rappresentanti le stopwords da eliminare
     """
-
+    newAuthors = []
     if "by" not in stop_words:
         stop_words.append("by")
 
@@ -163,73 +166,11 @@ def preprocessAuthors(dataframe, stop_words = []):
 
         text = text.lower()  # Ogni lettere viene portata in minuscolo
 
-        text = "".join([char for char in text if char not in punctuation])  # Rimozione punteggiature
+        text = "".join([char for char in text if char not in punctuation])  # Rimozione punteggiatura
 
         words = word_tokenize(text)
         filtered_words = [word for word in words if word not in stop_words and len(word) > 1]  # Rimozione stopwords e caratteri singoli
 
-        dataframe["Authors"].loc[index] = " ".join(filtered_words)
+        newAuthors.append(" ".join(filtered_words))
 
-
-def createDescriptionWordCloud(dataframe, save_file = "description_wordcloud"):
-    """
-        Funzione che permette la creazione e salvataggio di un'immagine wordcloud per le descrizioni.
-        Più nello specifico, vengono creati tanti wordcloud quante sono le categorie e ognuno di essi
-        conterrà solo le descrizioni di libri appartenenti ad una specifica categoria
-
-        Parametri:
-            - dataframe, dataframe su cui effettuare l'operazione
-            - save_file, nome del file (senza estensione finale) in cui salvare l'immagine wordcloud
-    """
-    n_categories = len(dataframe["Category"].unique())
-    n_rows, n_cols = (int(n_categories/2), 2)
-
-    fig, ax = plt.subplots(n_rows, n_cols, figsize=(10, n_rows*3))
-    fig.suptitle('WordCloud delle descrizioni', fontsize=40, y=1)
-    fig.tight_layout()
-
-    contAx = 0
-    for category in dataframe["Category"].unique():
-        descriptions = dataframe[ dataframe["Category"] == category ]["Description"].tolist()
-        text = ' '.join(descriptions)
-        wordcloud = WordCloud(background_color='white').generate(text)
-
-        ax[int(contAx/2), contAx%2].imshow(wordcloud)
-        ax[int(contAx/2), contAx%2].axis('off')
-        ax[int(contAx/2), contAx%2].set_title(category, fontsize=20, pad=10)
-
-        contAx += 1
-
-    plt.savefig(f"Plots/{save_file}.png")
-
-
-def createAuthorsWordCloud(dataframe, save_file = "authors_wordcloud"):
-    """
-        Funzione che permette la creazione e salvataggio di un'immagine wordcloud per gli autori.
-        Più nello specifico, vengono creati tanti wordcloud quante sono le categorie e ognuno di essi
-        conterrà solo gli autori di libri appartenenti ad una specifica categoria
-
-        Parametri:
-            - dataframe, dataframe su cui effettuare l'operazione
-            - save_file, nome del file (senza estensione finale) in cui salvare l'immagine wordcloud
-    """
-    n_categories = len(dataframe["Category"].unique())
-    n_rows, n_cols = (int(n_categories/2), 2)
-
-    fig, ax = plt.subplots(n_rows, n_cols, figsize=(10, n_rows*3))
-    fig.suptitle('WordCloud degli autori', fontsize=40, y=1)
-    fig.tight_layout()
-
-    contAx = 0
-    for category in dataframe["Category"].unique():
-        authors = dataframe[ dataframe["Category"] == category ]["Authors"].tolist()
-        text = ' '.join(authors)
-        wordcloud = WordCloud(background_color='white').generate(text)
-
-        ax[int(contAx/2), contAx%2].imshow(wordcloud)
-        ax[int(contAx/2), contAx%2].axis('off')
-        ax[int(contAx/2), contAx%2].set_title(category, fontsize=20, pad=10)
-
-        contAx += 1
-
-    plt.savefig(f"Plots/{save_file}.png")
+    dataframe["Authors"] = newAuthors

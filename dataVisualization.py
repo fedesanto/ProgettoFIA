@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+from wordcloud import WordCloud
+
 pd.set_option("display.max_columns", None)      # Mostra tutte le colonne quando stampi il dataframe
 pd.set_option("display.width", None)            # Non tornare a capo quando stampi il dataframe
 
@@ -58,3 +60,67 @@ def showData(dataframe, save_plot=None):
         plt.xlabel("Numero di libri")
         plt.savefig(f"Plots/{save_plot}.png")
         print(f"Memorizzato il plot delle categorie in: /Plots/{save_plot}.png")
+
+
+def createDescriptionWordCloud(dataframe, save_file = "description_wordcloud"):
+    """
+        Funzione che permette la creazione e salvataggio di un'immagine wordcloud per le descrizioni.
+        Più nello specifico, vengono creati tanti wordcloud quante sono le categorie e ognuno di essi
+        conterrà solo le descrizioni di libri appartenenti ad una specifica categoria
+
+        Parametri:
+            - dataframe, dataframe su cui effettuare l'operazione
+            - save_file, nome del file (senza estensione finale) in cui salvare l'immagine wordcloud
+    """
+    n_categories = len(dataframe["Category"].unique())
+    n_rows, n_cols = (int(n_categories/2), 2)
+
+    fig, ax = plt.subplots(n_rows, n_cols, figsize=(10, n_rows*3))
+    fig.suptitle('WordCloud delle descrizioni', fontsize=40, y=1)
+    fig.tight_layout()
+
+    contAx = 0
+    for category in dataframe["Category"].unique():
+        descriptions = dataframe[ dataframe["Category"] == category ]["Description"].tolist()
+        text = ' '.join(descriptions)
+        wordcloud = WordCloud(background_color='white').generate(text)
+
+        ax[int(contAx/2), contAx%2].imshow(wordcloud)
+        ax[int(contAx/2), contAx%2].axis('off')
+        ax[int(contAx/2), contAx%2].set_title(category, fontsize=20, pad=10)
+
+        contAx += 1
+
+    plt.savefig(f"Plots/{save_file}.png")
+
+
+def createAuthorsWordCloud(dataframe, save_file = "authors_wordcloud"):
+    """
+        Funzione che permette la creazione e salvataggio di un'immagine wordcloud per gli autori.
+        Più nello specifico, vengono creati tanti wordcloud quante sono le categorie e ognuno di essi
+        conterrà solo gli autori di libri appartenenti ad una specifica categoria
+
+        Parametri:
+            - dataframe, dataframe su cui effettuare l'operazione
+            - save_file, nome del file (senza estensione finale) in cui salvare l'immagine wordcloud
+    """
+    n_categories = len(dataframe["Category"].unique())
+    n_rows, n_cols = (int(n_categories/2), 2)
+
+    fig, ax = plt.subplots(n_rows, n_cols, figsize=(10, n_rows*3))
+    fig.suptitle('WordCloud degli autori', fontsize=40, y=1)
+    fig.tight_layout()
+
+    contAx = 0
+    for category in dataframe["Category"].unique():
+        authors = dataframe[ dataframe["Category"] == category ]["Authors"].tolist()
+        text = ' '.join(authors)
+        wordcloud = WordCloud(background_color='white').generate(text)
+
+        ax[int(contAx/2), contAx%2].imshow(wordcloud)
+        ax[int(contAx/2), contAx%2].axis('off')
+        ax[int(contAx/2), contAx%2].set_title(category, fontsize=20, pad=10)
+
+        contAx += 1
+
+    plt.savefig(f"Plots/{save_file}.png")

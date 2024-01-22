@@ -95,7 +95,7 @@ print("\n---------------------------------------------")
 showData(df, save_plot="dati_postprocessati")
 print("---------------------------------------------")
 
-
+"""
 # Addestramento dei modelli di classificazione
 print("\n---------------------------------------------")
 X = df[["Description", "Authors"]]
@@ -130,6 +130,7 @@ print(f"\nSecondo l'accuracy, il migliore modello è {best_model}, con uno score
 
 # Riaddestro il modello risultato migliore, identificandone la miglior configurazione di parametri per aumentarne ulteriormente il punteggio
 # L'addestramento e la successiva valutazione avverranno su un set differenti di dati rispetto all'addestramento precedente
+
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=89, stratify=Y)
 
 print(f"\nAddestramento di {best_model} ricercando i parametri migliori...")
@@ -141,20 +142,38 @@ predictionTime = testClassificator(X_test, Y_test, model, returnPredictionTime=T
 print(f"\nTesting concluso in {round(predictionTime, 2)} secondi")
 print("---------------------------------------------")
 
-
-
+"""
 # Addestramento dei modelli di clustering
 print("\n---------------------------------------------")
-print("Addestramento dei modelli di clustering\n")
 
 model_names = ["KMeans", "MiniBatchKMeans", "SpectralClustering"]
 
+silhouette_models={}
+models = {}
 print("Addestramento dei modelli di clustering")
 for model_name in model_names:
     print(f"\nAddestramento del modello {model_name}...")
     model, fitTime = trainClusters(df[["Description","Authors"]],model_name)
     print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
     print("\nAnalisi del modello...\n")
-    clusterAnalysis(df[["Description","Authors"]], model)
 
+    silhouette_models[model_name] = clusterAnalysis(df[["Description","Authors"]], model)
+    models[model_name] = model
+
+bestScore = 0
+best_model = None
+for model_name, model in models.items():        # Determino qual è stato il miglior modello sulla base dell'accuracy score
+    score = silhouette_models[model_name]
+    if score > bestScore:
+        bestScore = score
+        best_model = model_name
+
+print(f"\nSecondo il Silhouette score, il migliore modello è {best_model}, con uno score di {round(bestScore, 3)}")
+# Riaddestro il modello risultato migliore, identificandone la miglior configurazione di parametri per aumentarne ulteriormente il punteggio
+print(f"\nAddestramento di {best_model} ricercando i parametri migliori...")
+model, fitTime = trainClusters(df[["Description","Authors"]], model=best_model, findBestEstimator=True, saveEstimator=f"{best_model}_best")
+print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
+
+print("\nAnalisi del modello...\n")
+clusterAnalysis(df[["Description","Authors"]], model)
 print("\n---------------------------------------------")

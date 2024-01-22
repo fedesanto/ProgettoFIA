@@ -38,7 +38,7 @@ def cleanData(dataframe, des_threshold = 40):
 
 def renameCategories(dataframe, replacementList):
     """
-        Funzione che, per mezzo di una lista di riniminazioni, rimpiazza le categorie indicate con i nomi specificati
+        Funzione che, per mezzo di una lista di rinominazioni, rimpiazza le categorie indicate con i nomi specificati
 
         Parametri:
             - dataframe, dataframe su cui effettuare l'operazione

@@ -92,16 +92,16 @@ def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator 
 
     match model:    # A seconda del modello scelto, instanzio l'opportuna pipeline
         case "LogisticRegression":
-            modelPipe = Pipeline([('transformer', colTransformer), ('clf', LogisticRegression(max_iter=1000))])
+            modelPipe = Pipeline([('transformer', colTransformer), ('clf', LogisticRegression(max_iter=2000))])
 
         case "SGDClassifier":
-            modelPipe = Pipeline([('transformer', colTransformer), ('clf', SGDClassifier())])
+            modelPipe = Pipeline([('transformer', colTransformer), ('clf', SGDClassifier(max_iter=2000))])
 
         case "MultinomialNB":
             modelPipe = Pipeline([('transformer', colTransformer), ('clf', MultinomialNB())])
 
         case "LinearSVC":
-            modelPipe = Pipeline([('transformer', colTransformer), ('clf', LinearSVC(dual="auto"))])
+            modelPipe = Pipeline([('transformer', colTransformer), ('clf', LinearSVC(dual="auto", max_iter=2000))])
 
         case "ComplementNB":
             modelPipe = Pipeline([('transformer', colTransformer), ('clf', ComplementNB())])

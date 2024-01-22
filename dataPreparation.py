@@ -13,7 +13,7 @@ nltk.data.path.append("nltk_data")  # Necessario per indicare alla libreria "nlt
 def cleanData(dataframe, des_threshold = 40):
     """
         Funzione per la pulizia del dataframe. In successione:
-            1) Rimuove righe con almenon un campo nullo
+            1) Rimuove righe con almeno un campo nullo
             2) Rimuove righe duplicate
             3) Rimuove righe con descrizioni non significative (con meno di 'des_threshold' caratteri)
 
@@ -38,7 +38,7 @@ def cleanData(dataframe, des_threshold = 40):
 
 def renameCategories(dataframe, replacementList):
     """
-        Funzione che, per mezzo di una lista di roniminazioni, rimpiazza le categorie indicate con i nomi specificati
+        Funzione che, per mezzo di una lista di riniminazioni, rimpiazza le categorie indicate con i nomi specificati
 
         Parametri:
             - dataframe, dataframe su cui effettuare l'operazione

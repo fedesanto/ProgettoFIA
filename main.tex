@@ -20,6 +20,11 @@
 
 \usepackage{hyperref}
 
+\usepackage{floatrow} 
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{wrapfig}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
@@ -108,30 +113,48 @@
 \label{table:ta}
 \end{enumerate}
 
-    \begin{enumerate}
-    \subsection{Analisi del problema}
-    \begin{justify}
     
-    \end{justify}
-    \end{enumerate}
 
 \section{Analisi e preparazione dei dati}
     \begin{enumerate}
     \subsection{Scelta del dataset}
     \begin{justify}
-    Per lo scopo di tale progetto si è scelto un dataset già esistente, reperibile \href{https://www.kaggle.com/datasets/elvinrustam/books-dataset}{qui}. La ricerca del dataset si è basata sulla necessità di trovarne uno contenente film provveduti di descrizione e autori. Il dataset fornisce informazioni relative a 103063 libri ed ha una dimensione di 69.75MB. Inizialmente presentava 7 features diverse: Title, Authors, Description, Category, Publisher, Publish Date, Price. Tutti i dati sono in formato testuale.
+    Per lo scopo di tale progetto si è scelto un dataset già esistente, reperibile \href{https://www.kaggle.com/datasets/elvinrustam/books-dataset}{qui}. La ricerca del dataset si è basata sulla necessità di trovarne uno contenente libri provveduti di descrizione e autori. Il dataset fornisce informazioni relative a 103063 libri ed ha una dimensione di 69.75MB. Tutti i dati sono in formato testuale. Inizialmente presentava 7 features diverse (Title, Authors, Description, Category, Publisher, Publish Date, Price) ma per lo scopo del nostro progetto abbiamo ritenuto sufficiente considerare solo le seguenti features: Title, Authors, Description, Category.  
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Data cleaning}
     \begin{justify}
-    
+    Il Data Cleaning è la fase durante la quale ci si occupa di "pulire" il dataset mantenendo solo i dati più completi e chiari. Da una prima analisi del dataset si è rilevata la presenza di campi nulli per alcune righe e la presenza della stessa descrizione di default (inserita dall'autore del dataset) ripetuta in una parte dei libri. La presenza di questa descrizione di default può ostacolare l'esecuzione delle tecniche di classificazione e degli algoritmi di clustering che saranno implementate successivamente. Per ovviare a questi problemi è stata eseguita un'eliminazione delle righe con campi nulli e delle righe duplicate. Tutte queste operazioni sono state svolte tramite la funzione "cleanData". Come risultato si è ottenuto un dataset composto da sole descrizioni significative.
     \end{justify}
+    \includegraphics[width=0.95\textwidth]{cleanData.png}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Bilanciamento dataset}
+    \begin{justify}
+    Da una prima osservazione del grafico, che mostra i libri divisi nei 20 generi, si può notare che il dataset è sbilanciato. Quindi, per ovviare a problemi di overfitting, si è ritenuto necessario bilanciare il dataset quanto più possibile. Ciò è stato fatto tramite l'utilizzo della funzione "balanceCategories", la quale verifica il numero di righe per ogni categoria ed elimina casualmente delle righe di categorie con più di 'threshold' esempi.
+    \end{justify}
+    \includegraphics[width=0.95\textwidth]{balanceCategories.png}
+    \begin{justify}
+    Si passa da un dataset aventi i seguenti dati iniziali:
+    \end{justify}
+    \includegraphics[width=0.96\textwidth]{dati_iniziali.png}
+    \begin{justify}
+    Al seguente dataset più bilanciato:
+    \end{justify}
+    \includegraphics[width=0.96\textwidth]{dati_postprocessati.png}
+
+
+    \begin{wrapfigure}{r}{0.50\textwidth}
+    \begin{justify}
+    Possiamo concludere che sono state effettuate le seguenti modifiche del sataset in questione, con la rimozione del seguente numero di righe:
+    \end{justify}
+    \includegraphics[width=0.70\textwidth, right]{bilanciamento.png}
+    \caption{Didascalia dell'immagine}
+    \label{fig:immagine_esempio}
+    \end{wrapfigure}
     \end{enumerate}
 
     \begin{enumerate}
@@ -186,3 +209,5 @@
 
     
 \end{document}
+
+

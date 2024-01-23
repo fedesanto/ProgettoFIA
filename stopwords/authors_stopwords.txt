@@ -1,0 +1,10 @@
+book
+books
+editor
+editors
+mr
+mrs
+dr
+jr
+magazine
+and

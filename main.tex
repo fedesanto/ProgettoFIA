@@ -125,18 +125,28 @@
     \begin{enumerate}
     \subsection{Data cleaning}
     \begin{justify}
-    Il Data Cleaning è la fase durante la quale ci si occupa di "pulire" il dataset mantenendo solo i dati più completi e chiari. Da una prima analisi del dataset si è rilevata la presenza di campi nulli per alcune righe e la presenza della stessa descrizione di default (inserita dall'autore del dataset) ripetuta. La presenza di questa descrizione di default può ostacolare la corretta esecuzione delle tecniche di classificazione e degli algoritmi di clustering che saranno implementate successivamente. Per ovviare a questi problemi è stata eseguita un'eliminazione delle righe con campi nulli e delle righe duplicate. Tutte queste operazioni sono state svolte tramite la funzione "cleanData".
+    Il Data Cleaning è la fase durante la quale ci si occupa di "pulire" il dataset mantenendo solo i dati più completi e chiari. Da una prima osservazione dei dati è stata rilevata la presenza di due aspetti che possono ostacolare la corretta esecuzione dei metodi di classificazione e degli algoritmi di clustering che saranno implementati successivamente. Le operazioni svolte sui dati sono state svolte tramite la funzione "clearData". La prima correzione effettuata è stata l'eliminazione dei campi nulli presenti in alcune righe in modo da ottenere un dataset completo senza dati mancanti. Successivamente è stata eseguita l'eliminazione delle righe duplicate e di quelle non significative poiché non contribuiscono a migliorare la Classificazione e il Clustering. Per decidere quali sono le frasi non significative è stato utilizzato il parametro "des\textunderscore{}threshold" che indica un limite. Se le frasi contengono un numero di caratteri inferiore a "des\textunderscore{}treshold" allora verranno considerate non significative. La funzione "clearData" applica la prima e la seconda operazione sui dati delle features: Descrizioni e autori, mentre la terza operazione verrà eseguita solo sulla feature delle descrizioni poiché applicarla agli autori risulta inutile e controproducente. 
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/cleanData.png}
     \begin{justify}
-    Lavorare su dati testuali significa lavorare su Natural Language. Quest'aspetto implica una sequenza di azioni di normalizzazione da applicare sulle descrizioni dei libri. La funzione "preprocessDescription" si occupa di svolgere queste azioni. La prima modifica verrà fatta rendendo tutti i caratteri minuscoli in modo da rendere i dati testuali più uniformi e leggibili. Successivamente ci si occuperà di rimuovere la punteggiatura poiché aggiunge rumore ma non semantica. La terza azione si occupa di rimuovere le stop words ovvero quelle parole comuni che non indicano il significato principale della frase, per esempio: articoli, congiunzioni, ecc. L'ultima operazione da svolgere è la lemmatizzazione (stemming in inglese). Durante questa fase vengono prese le parole più significative superstiti dalle azioni precedenti e vengono sostituite dalla loro parola radice (esempio: connesso diventa connessione). In conclusione, dopo la fase di Data Cleaning, avremmo un database completo e leggibile che garantisca sia la qualità che la quantità dei dati. L'immagine seguente mostra l'implementazione di tutte queste modifiche applicate sulle descrizioni ma, ovviamente, le stesse operazioni verranno svolte anche sugli autori.
+    %da aggiungere
+    %le stopwords ricavate da libreria nltk e altre aggiunte
+    %correggi lemmatizzazione e stemming
+    %lemmatizzazione non applicata agli autori per non rovinare le parole 
+    Lavorare su dati testuali significa lavorare sul Natural Language. Quest'aspetto implica una sequenza di azioni di normalizzazione da applicare sulle descrizioni dei libri e sugli autori. Le funzioni "preprocessAuthors" e "preprocessDescription" si occupano di svolgere queste azioni. La funzione "preprocessAuthors" esegue tre operazioni: i caratteri verrano resi tutti minuscoli in modo da rendere i dati testuali più uniformi e leggibili, verrà eliminata la punteggiatura per eliminare il rumore e l'ultima è l'eliminazione delle stop words. Tramite l'utilizzo delle librerie NLTK sono state individuate le stop words e sono state successivamente aggiunte ai file "authors\textunderscore{}stopwords.txt" e "description\textunderscore{}stopwords.txt" in modo da distinguere le stop words all'interno delle features "autori" e "descrizioni". 
+    La funzione "preprocessDescrition" eseguirà le stesse operazioni svolte da "preprocessAuthors" occupandosi, però, di svolgere anche la lemmatizzazione. La lemmatizzazione è una tecnica che permette la riduzione delle parole nella loro forma radice considerando sia la grammatica che il significato (esempio: playing in play). 
+    In conclusione, dopo la fase di Data Cleaning, avremmo un database completo e leggibile che garantisca sia la qualità che la quantità dei dati. 
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/preprocessDescription.png}
     \end{enumerate}
+    
+    
 
     \begin{enumerate}
     \subsection{Feature Selection}
     \begin{justify}
+    %aggiungi
+    %genere utilizzata come variabile dipendente
     Il dataset orginale presentava sette features diverse: Title, Authors, Description, Category, Publisher, Publish Date e Price. Per lo scopo del nostro progetto verrano prese in considerazioni solo le feature che contengono: il titolo, per una questione di chiarezza, la descrizione e gli autori, poiché sono le due caratteristiche che utilizzeremo per predirre il genere del libro, e il genere per organizzare i libri e valutare se la predizione ha dato esito positivo.
     \end{justify}
     \end{enumerate}
@@ -145,17 +155,33 @@
     \begin{enumerate}
     \subsection{Bilanciamento dataset}
     \begin{justify}
-    Da una prima osservazione del grafico, che mostra i libri divisi nei 20 generi, si può notare lo sbilanciamento del dataset. Dunque, per ovviare a problemi di overfitting, si è ritenuto necessario bilanciarlo quanto più possibile. Ciò è stato fatto tramite l'utilizzo della funzione "balanceCategories", la quale verifica il numero di righe per ogni categoria ed elimina casualmente delle righe di categorie con più di 'threshold' esempi.
+    %sistema l'ordine
+    Da una prima osservazione del grafico, che mostra i libri divisi nei 20 generi, si può notare lo sbilanciamento del dataset. 
+    \end{justify}
+    
+    \begin{figure}[H]
+    \includegraphics[width=1\textwidth]{pics/dati_iniziali.png}
+    \caption{Database non bilanciato}
+    \end{figure}
+    
+    \begin{justify}
+    Dunque, per ovviare a problemi di overfitting, si è ritenuto necessario bilanciarlo quanto più possibile. Si passa dunque al seguente dataset:
+    \end{justify}
+    
+    \begin{figure}[H]
+    \includegraphics[width=1\textwidth]{pics/dati_postprocessati.png}
+    \caption{Database bilanciato}
+    \end{figure}
+    
+    \begin{justify}
+    Come è possibile notare dalla 'Figure 2' il dataset non risulta completamente bilanciato. Questo risultato è dovuto alla natura stessa del dataset. Per ottenere un dataset bilanciato si sarebbero dovute eliminare molte informazioni, non avendo così più a disposizione abbastanza dati per addestrare i nostri modelli.\\
+    \end{justify}
+    \hfill
+    \begin{justify}
+    Il bilanciamento del dataset è stato effettuato tramite la funzione "balanceCategories", la quale verifica il numero di righe per ogni categoria ed elimina casualmente delle righe di categorie con più di 'threshold' esempi.
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/balanceCategories.png}
-    \begin{justify}
-    Si passa da un dataset aventi i seguenti dati iniziali:
-    \end{justify}
-    \includegraphics[width=0.96\textwidth]{pics/dati_iniziali.png}
-    \begin{justify}
-    Al seguente dataset più bilanciato:
-    \end{justify}
-    \includegraphics[width=0.96\textwidth]{pics/dati_postprocessati.png}
+    
 
     \begin{minipage}[t]{0.40\textwidth}
     \vspace{30pt}
@@ -173,6 +199,7 @@
     \begin{enumerate}
     \subsection{Visualizzazione Word Cloud}
     \begin{justify}
+    Word Cloud è una tecnica per la visualizzazione dei dati. È utilizzata per rappresentare dati di testo in cui la dimensione di ciascuna parola ne indica l'importanza.\\
     Grazie all'utilizzo delle WordCloud, nello specifico tramite l'utilizzo delle funzioni "createDescriptionWordCloud" e "createAuthorsWordCloud", è stato possibile illustrare le parole chiavi presenti all'interno delle descrizioni e degli autori. Verrano creati tanti WordCloud quante sono le categorie.
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/descriptionWordCloud.png}
@@ -187,11 +214,30 @@
     \caption{Word Cloud delle descrizioni non processate}
     \end{figure}
 
-    \hfill
+    %\hfill
     \begin{justify}
-    Tale illustrazione ci permette di analizzare con più semplicità le parole ricorrenti ed individuare delle stop words aggiuntive, che fanno riferimento al dataset in questione, come ad esempio "book" e "life". Allo stesso ragionamento vengono sottoposti gli autori. Ecco le stop word individuate:
+    Tale illustrazione ci permette di analizzare con più semplicità le parole ricorrenti ed individuare delle stop words aggiuntive, che fanno riferimento al dataset in questione, come ad esempio "book" e "life". Allo stesso ragionamento vengono sottoposti gli autori.Per le stop words aggiuntive inerenti alla descrizione e agli autori sono stati creati due nuovi file di testo, chiamati rispettivamente "description\textunderscore{}stopwords.txt" e "authors\textunderscore{}stopwords.txt". Ecco le stop word individuate:
     \end{justify}
-    \includegraphics[width=0.95\textwidth]{pics/aggiuntaStopWords.png}
+    %\includegraphics[width=0.10\textwidth]{pics/aggiuntaStopWordsDescription.png}
+    
+    \begin{figure}[H]
+    \begin{subfigure}{0.15\textwidth}
+    \includegraphics[width=\linewidth]{pics/aggiuntaStopWordsDescription.png} 
+    \begin{justify}
+    \caption{Stop Word delle descrizioni}  
+    \end{justify}
+    \label{fig:subim1}
+    \end{subfigure}
+    \hspace{3cm}
+    \begin{subfigure}{0.17\textwidth}
+    \includegraphics[width=\linewidth]{pics/aggiuntaStopWordsAutori.png}
+    \begin{justify}
+    \caption{Stop Word degli autori}   
+    \end{justify}
+    \label{fig:subim2}
+    \end{subfigure}
+    \caption{Stop Word aggiunte}
+    \end{figure}
 
     \newpage
     \begin{justify}
@@ -224,16 +270,24 @@
 
     \begin{enumerate}
     \subsection{Formattazione dei dati}
+    \begin{justify}
+    Il dataset utilizzato è composto da soli dati testuali ma per appiclare tecniche di machine learning è necessario formattarli. Abbiamo scelto di utilizzare TF-IDF come tecnica per elaborare il linguaggio naturale utilizzato per rappresentare i dati. TF-IDF sta per Term Frequency-Inverse Document Frequency infatti si occupa di calcolare due valori: la frequenza di una parola nel documento e quanto una parola è unica in tutti i documenti. Nel codice viene implementato il TfidfVectorizer che avrà come output una matrice, composta da valori di tf-idf, la quale è una rappresentazione numerica dei dati che serviranno per lo studio dello scopo del progetto. 
+    \end{justify}
     \end{enumerate}
 
 
 \section{Classificazione}
+
     \begin{enumerate}
-    \subsection{Support Vector Classification}
+    \subsection{Linear Support Vector Classification  }
     \end{enumerate}
    
     \begin{enumerate}
     \subsection{Mulinomial Classification}
+    \end{enumerate}
+    
+     \begin{enumerate}
+    \subsection{Complement Naive Bayes Classification}
     \end{enumerate}
     
     \begin{enumerate}
@@ -241,8 +295,10 @@
     \end{enumerate}
 
     \begin{enumerate}
-    \subsection{SGD Classification}
+    \subsection{Stochastic Gradient Descent Classification}
     \end{enumerate}
+
+   
     
     \begin{enumerate}
     \subsection{Valutazione della Classificazione}
@@ -250,20 +306,44 @@
 
 
 \section{Clustering}
+    \begin{justify}
+        Allo scopo di effettuare un confronto più coerente con gli algoritmi di Classificazione, sono stati selezionati degli algoritmi di Clustering per cui il numero di cluster venisse impostato a priori. I modelli selezionati e addestrati sul dataset sono stati: K-Means, Mini-Batch KMeans e Spectral Clustering.
+    \end{justify}
     \begin{enumerate}
     \subsection{Algoritmo K-Means}
+    \begin{justify}
+        L'algoritmo K-Means ha la funzione di assegnare oggetti ad un determinato cluster in modo che ci sia omogeneità tra gli oggetti nello stesso cluster ed eterogeneità tra gli oggetti in cluster diversi. È possibile descrivere questo algoritmo tramite i seguenti step:\\
+    1) Scegliere in modo casuale K punti nel dataset che saranno i centroidi iniziali;\\
+    2) Generare un partizionamento assegnando ogni campione al centroide più vicino;\\
+    3) Calcolare i nuovi centroidi del cluster considerando la media dei valori del cluster generato al punto 2;\\
+    4) Ripetere i passi 2 e 3 fino a quando i centroidi non varieranno più.
+    \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
-    \subsection{Algoritmo MiniBatchKMean}
+    \subsection{Algoritmo MiniBatchKMeans}
+    \begin{justify}
+         L'algoritmo MiniBatchKMeans è una variante dell'algoritmo K-Means standard che utilizza minibatch, ovvero sottoinsiemi di dati di input campionati casualmente in ogni iterazione di training, di campioni per aggiornare i centroidi invece di utilizzare l'intero set di dati. Questo approccio rende Mini-Batch K-Means più efficiente computazionalmente, permettendo di lavorare su dataset più grandi. A differenza di altri algoritmi che riducono il tempo di convergenza, il mini-batch kmeans produce risultati che generalmente risultano leggermente peggiori rispetto all’algoritmo standard. È possibile descrivere l'algoritmo in questione tramite i seguenti step:\\
+    1) Scegliere in modo casuale K punti nel dataset che saranno i centroidi iniziali;\\
+    2) Selezionare casualmente un minibatch di dimensione prefissata dal dataset, generare un partizionamento           assegnando ogni suo campione al centroide più vicino e infine aggiornare i centroidi usando la media dei punti nel minibatch corrente;\\
+    3) Per ciascun cluster, calcolare i nuovi centroidi come la media dei punti assegnati a quel cluster;\\
+    4) Ripetere i passi 2 e 3 fino a quando i centroidi non varieranno più.
+    \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Algoritmo SpectralClustering}
+    \begin{justify}
+        L'algoritmo SpectralClustering sfrutta il concetto di teoria spettrale (legata allo studio delle funzioni analitiche) e consente la gestione di strutture complesse e non lineari di dati. Utilizza la similarità tra i punti del dataset per costruire un grafo, per poi trasformarlo in uno spazio di dimensioni inferiori attraverso una procedura basata sugli autovettori. Infine, applica un algoritmo di clustering (ad esempio K-Means) nello spazio trasformato per raggruppare i punti in cluster.
+    \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Valutazione del Clustering: Silhouette score}
+    \begin{justify}
+        Allo scopo di valutare gli algoritmi di clustering ne è stato calcolato il rispettivo Silhoutte score, il cui valore oscilla tra -1, per clustering errato, e +1, per clustering altamente denso. Invece i punteggi intorno allo 0 indicano la presenza di clusters sovrapposti. 
+        In seguito, si ha avuto cura di ricercare in maniera randomica gli iperparametri migliori del modello con lo score più alto.
+    \end{justify}
     \end{enumerate}
 
 \section{Conclusioni}

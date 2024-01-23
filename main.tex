@@ -309,45 +309,71 @@
 
 \section{Clustering}
     \begin{justify}
-        Allo scopo di effettuare un confronto più coerente con gli algoritmi di Classificazione, sono stati selezionati degli algoritmi di Clustering per cui il numero di cluster venisse impostato a priori. I modelli selezionati e addestrati sul dataset sono stati: K-Means, Mini-Batch KMeans e Spectral Clustering.
+        Nel contesto dell'analisi e dell'organizzazione di un vasto insieme di libri provenienti da un dataset contenente descrizioni e informazioni sugli autori, il Clustering, basato sulle regole dell'apprendimento non supervisionato, si presenta, in linea teorica, come un buon approccio alternativo alla classificazione. Questa metodologia ci offre la possibilità di organizzare i libri in gruppi sfruttando contemporaneamente le somiglianze semantiche nelle descrizioni e le ricorrenze degli autori per ogni cluster in modo da creare connessioni significative tra opere affini. Conoscendo a priori il numero di categorie differenti presenti nel dataset (16), si è adottato un approccio che coinvolge algoritmi di Clustering in cui il numero di gruppi risultanti al termine sia preimpostato come iperparametro. Di conseguenza, questa scelta ci ha permesso di effettuare anche un confronto più accurato con gli algoritmi di Classificazione. I modelli selezionati e addestrati sul dataset sono stati: K-Means, Mini-Batch KMeans e Spectral Clustering.
     \end{justify}
     \begin{enumerate}
     \subsection{Algoritmo K-Means}
     \begin{justify}
-        L'algoritmo K-Means ha la funzione di assegnare oggetti ad un determinato cluster in modo che ci sia omogeneità tra gli oggetti nello stesso cluster ed eterogeneità tra gli oggetti in cluster diversi. È possibile descrivere questo algoritmo tramite i seguenti step:\\
-    1) Scegliere in modo casuale K punti nel dataset che saranno i centroidi iniziali;\\
-    2) Generare un partizionamento assegnando ogni campione al centroide più vicino;\\
-    3) Calcolare i nuovi centroidi del cluster considerando la media dei valori del cluster generato al punto 2;\\
-    4) Ripetere i passi 2 e 3 fino a quando i centroidi non varieranno più.
+        L'algoritmo K-Means raggruppa i dati cercando di separare i campioni in K gruppi di uguale varianza minimizzando un criterio, noto come “somma dei quadrati”, all'interno del cluster. Possiamo descrivere questo procedimento con i seguenti step:
+        \begin{enumerate}[label=\arabic*)]
+            \item Scegliere in modo casuale K punti nel dataset come centroidi iniziali;
+            \item Generare un partizionamento assegnando ogni campione al centroide più vicino;
+            \item Calcolare i nuovi centroidi del cluster considerando la media dei valori del cluster generato al punto 2;
+            \item Ripetere i passi 2 e 3 fino a quando i centroidi non cambino;
+        \end{enumerate}
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Algoritmo MiniBatchKMeans}
     \begin{justify}
-         L'algoritmo MiniBatchKMeans è una variante dell'algoritmo K-Means standard che utilizza minibatch, ovvero sottoinsiemi di dati di input campionati casualmente in ogni iterazione di training, di campioni per aggiornare i centroidi invece di utilizzare l'intero set di dati. Questo approccio rende Mini-Batch K-Means più efficiente computazionalmente, permettendo di lavorare su dataset più grandi. A differenza di altri algoritmi che riducono il tempo di convergenza, il mini-batch kmeans produce risultati che generalmente risultano leggermente peggiori rispetto all’algoritmo standard. È possibile descrivere l'algoritmo in questione tramite i seguenti step:\\
-    1) Scegliere in modo casuale K punti nel dataset che saranno i centroidi iniziali;\\
-    2) Selezionare casualmente un minibatch di dimensione prefissata dal dataset, generare un partizionamento           assegnando ogni suo campione al centroide più vicino e infine aggiornare i centroidi usando la media dei punti nel minibatch corrente;\\
-    3) Per ciascun cluster, calcolare i nuovi centroidi come la media dei punti assegnati a quel cluster;\\
-    4) Ripetere i passi 2 e 3 fino a quando i centroidi non varieranno più.
+    L'algoritmo MiniBatchKMeans è una variante dell'algoritmo K-Means standard che utilizza minibatch di campioni. Quest'ultimi sono sottoinsiemi di dati input, campionati casualmente in ogni iterazione di training, utilizzati per aggiornare i centroidi invece di utilizzare l'intero set di dati. Quest'approccio rende Mini-Batch K-Means più efficiente dal punto di vista computazionale permettendo di lavorare su dataset più grandi rispetto al K-Means tradizionale. A differenza di altri algoritmi, che riducono il tempo di convergenza, il Mini-Batch K-Means produce risultati che generalmente sono solo lievemente peggiori rispetto all’algoritmo standard. 
+    Possiamo descrivere questo algoritmo con i seguenti step:
+    \begin{enumerate}[label=\arabic*)]
+        \item Scegliere in modo casuale K punti nel dataset come centroidi iniziali;
+        \item Ad ogni iterazione, seleziona casualmente un minibatch di dimensione prefissata dal dataset;
+        \item Genera un partizionamento assegnando ogni campione del minibatch al centroide più vicino;
+        \item Aggiorna i centroidi usando la media dei punti nel minibatch corrente;
+        \item Vengono ripetuti i passi da 2 a 4 fino a quando i centroidi non cambiano;
+    \end{enumerate}
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Algoritmo SpectralClustering}
     \begin{justify}
-        L'algoritmo SpectralClustering sfrutta il concetto di teoria spettrale (legata allo studio delle funzioni analitiche) e consente la gestione di strutture complesse e non lineari di dati. Utilizza la similarità tra i punti del dataset per costruire un grafo, per poi trasformarlo in uno spazio di dimensioni inferiori attraverso una procedura basata sugli autovettori. Infine, applica un algoritmo di clustering (ad esempio K-Means) nello spazio trasformato per raggruppare i punti in cluster.
+    L'algoritmo SpectralClustering si basa sulla teoria spettrale, ovvero una branca matematica legata allo studio delle proprietà degli spettri degli operatori lineari. Quest' approccio offre un modo potente per affrontare strutture complesse e non lineari nei dati, le quali non possono essere gestite adeguatamente da metodi più tradizionali come K-Means. 
+    Il processo di funzionamento può essere suddiviso in diverse fasi:
+    \begin{enumerate}[label=\arabic*)]
+        \item Utilizzando la similarità tra i punti del dataset (calcolata ad esempio utilizzando la distanza euclidea tra i punti), viene costruito un grafo;
+        \item Sfruttando la teoria spettrale, il grafo viene trasformato in uno spazio di dimensioni inferiori attraverso la procedura degli autovettori e degli autovalori.
+        \item Una volta ottenuto lo spazio trasformato, viene applicato un algoritmo di Clustering, come ad esempio K-Means, per raggruppare i punti in cluster. 
+        \item I risultati dell'algoritmo di Clustering vengono utilizzati per assegnare ciascun punto del dataset a un cluster specifico. La coerenza e la separazione dei cluster dipendono dalla capacità della trasformazione spettrale di rivelare pattern significativi nei dati.
+    \end{enumerate}
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Valutazione del Clustering: Silhouette score}
     \begin{justify}
-        Allo scopo di valutare gli algoritmi di clustering ne è stato calcolato il rispettivo Silhoutte score, il cui valore oscilla tra -1, per clustering errato, e +1, per clustering altamente denso. Invece i punteggi intorno allo 0 indicano la presenza di clusters sovrapposti. 
-        In seguito, si ha avuto cura di ricercare in maniera randomica gli iperparametri migliori del modello con lo score più alto.
+        Una volta ottenuti i gruppi di elementi, si analizza il Silhouette Score con lo scopo di ricavare informazioni sulla coesione degli elementi dei singoli gruppi e sulla separazione tra di essi. Questa metrica di stima presenta un valore compreso nell’intervallo [-1,+1], dove:
+        \begin{itemize}
+            \item $-1$: indica clustering errato;
+    	\item  $0$: indica cluster sovrapposti;
+    	\item $+1$: indica clustering altamente denso;
+        \end{itemize}
+        Dal punto di vista matematico, il Silhouette Score è definito dalla formula:
+        \[
+        S(i) = \frac{b(i) - a(i)}{\max(b(i), a(i)}
+        \]
+        Dove $b(i)$ è la distanza media dal punto $i$ a tutti gli altri punti del cluster più vicino e $a(i)$ è la distanza media dal punto $i$ a tutti gli altri punti dello stesso cluster.
+        Il valore finale sarà poi ottenuto come la media di tutti i singoli coefficienti di Silhouette.
     \end{justify}
     \end{enumerate}
 
+     \begin{enumerate}
+     \subsection{Ottimizzazione}
+     \end{enumerate}
 \section{Conclusioni}
 
     

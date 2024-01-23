@@ -165,7 +165,7 @@ for model_name in model_names:
 
 bestScore = 0
 best_model = None
-for model_name, model in models.items():        # Determino qual è stato il miglior modello sulla base dell'accuracy score
+for model_name, model in models.items():        # Determino qual è stato il miglior modello sulla base del Silhouette score
     score = silhouette_models[model_name]
     if score > bestScore:
         bestScore = score
@@ -173,9 +173,10 @@ for model_name, model in models.items():        # Determino qual è stato il mig
 
 print(f"\nSecondo il Silhouette score, il migliore modello è {best_model}, con uno score di {round(bestScore, 3)}")
 # Riaddestro il modello risultato migliore, identificandone la miglior configurazione di parametri per aumentarne ulteriormente il punteggio
-print(f"\nAddestramento di {best_model} ricercando i parametri migliori...")
+print(f"\nAddestramento di {best_model} ricercando la configurazione migliore...")
 model, fitTime = trainClusters(df[["Description","Authors"]], model=best_model, findBestEstimator=True, saveEstimator=f"{best_model}_best")
 print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
+
 
 print("\nAnalisi del modello...\n")
 clusterAnalysis(df[["Description","Authors"]], model)

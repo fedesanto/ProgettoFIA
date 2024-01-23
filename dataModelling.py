@@ -17,6 +17,12 @@ from joblib import dump
 
 from time import time
 
+import warnings
+from sklearn.exceptions import ConvergenceWarning
+
+warnings.filterwarnings('ignore', category= ConvergenceWarning)  # Disabilito i warning
+
+
 def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator = False, returnFitTime = True, saveEstimator = None):
     """
         Funzione che permette di addesstrare e restituire un modello di classificazione sulla base dei dati passati.
@@ -223,7 +229,7 @@ def trainClusters(X, model, findBestEstimator = False, returnFitTime = True, sav
 
     if findBestEstimator:  # Se findBestEstimator = True, ricerco il "miglior" modello
         params = getModelParams(model)
-        rs = RandomizedSearchCV(modelPipe, params, cv=5, n_jobs=-1)
+        rs = RandomizedSearchCV(modelPipe, params, scoring=cv_silhouette_scorer, cv=[(slice(None), slice(None))], n_jobs=-1)
         start_time = time()
         rs.fit(X)
         fitTime = time() - start_time
@@ -245,6 +251,25 @@ def trainClusters(X, model, findBestEstimator = False, returnFitTime = True, sav
     else:
         return trainedModel
 
+def cv_silhouette_scorer(estimator, X):
+    """"
+        Funzione di utilità per il RandomizedSearchCV del clustering. Resituisce lo score sulla base del quale valutare
+        l'algoritmo migliore
+
+        Parametri:
+            - estimator, pipeline contenente il columnTransformer e la metodologia di clustering da analizzare
+            - X, dataframe con due colonne di "Description" e "Authors"
+    """
+
+    estimator.fit(X)
+    X_tran = estimator.named_steps["transformer"].transform(X)
+    cluster_labels = estimator.named_steps["clt"].labels_
+    num_labels = len(set(cluster_labels))
+    num_samples = len(X.index)
+    if num_labels == 1 or num_labels == num_samples:
+        return -1
+    else:
+        return silhouette_score(X_tran, cluster_labels)
 
 def clusterAnalysis(X, model, n_terms=10):
     """
@@ -265,7 +290,7 @@ def clusterAnalysis(X, model, n_terms=10):
 
     clusters = model.named_steps["clt"].labels_
     score = silhouette_score(X_transformed, clusters)
-    print(f"Silhouette Score: {score}")
+    print(f"Silhouette Score: {round(score, 3)}")
 
     print("Le keywors delle descrizioni per ogni cluster sono:")
     get_top_keywords(X["Description"], des_transformer, clusters, n_terms)

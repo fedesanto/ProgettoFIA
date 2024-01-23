@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import os
-import warnings
 
 from sklearn.model_selection import train_test_split
 from dataVisualization import *
@@ -16,9 +15,6 @@ if not os.path.isdir("Plots"):      # Mi assicuro che la cartella "Plots" esista
 
 if not os.path.isdir("Models"):  # Mi assicuro che la cartella "Models" esista
      os.mkdir("Models")
-
-warnings.filterwarnings('ignore')  # Disabilito i warning
-
 
 
 df = pd.read_csv("Data/BooksDataset.csv", usecols=["Title", "Description", "Authors", "Category"])

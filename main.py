@@ -17,7 +17,7 @@ if not os.path.isdir("Plots"):      # Mi assicuro che la cartella "Plots" esista
 if not os.path.isdir("Models"):  # Mi assicuro che la cartella "Models" esista
      os.mkdir("Models")
 
-# warnings.filterwarnings('ignore')  # Disabilito i warning
+warnings.filterwarnings('ignore')  # Disabilito i warning
 
 
 
@@ -69,8 +69,11 @@ print("---------------------------------------------")
 
 # Preprocesso i campi "Description" e "Authors" per renderli più puliti. Inoltre creo dei wordcloud prima e dopo avere processati i campi
 print("\n---------------------------------------------")
-description_stopwords = stopwords.words('english') + ["life", "book", "one", "new", "time", "world", "find", "using", "use"]
-authors_stopwords = ["book", "books", "editor", "editors", "mr", "mrs", "dr", "jr", "magazine", "and"]
+with open('stopwords/description_stopwords.txt', 'r') as fd:  # Recupero le stopwords per le descrizioni
+    description_stopwords = [word.replace("\n", "") for word in fd]
+
+with open('stopwords/authors_stopwords.txt', 'r') as fd:      # Recupero le stopwords per gli autori
+    authors_stopwords = [word.replace("\n", "") for word in fd]
 
 print("Creo il wordcloud delle descrizioni non processate...")
 createDescriptionWordCloud(df, save_file="wordcloud_descrizioni_nonprocessate")
@@ -95,7 +98,7 @@ print("\n---------------------------------------------")
 showData(df, save_plot="dati_postprocessati")
 print("---------------------------------------------")
 
-"""
+
 # Addestramento dei modelli di classificazione
 print("\n---------------------------------------------")
 X = df[["Description", "Authors"]]
@@ -108,7 +111,7 @@ models = {}
 print("Addestramento dei modelli di classificazione")
 for model_name in model_names:      # Addesstro e valuto tutti i modelli specificati in "model_names"
     print(f"\nAddestramento del modello {model_name}...")
-    model, fitTime = trainClassificator(X_train, Y_train, model=model_name, returnFitTime=True)
+    model, fitTime = trainClassificator(X_train, Y_train, model=model_name, returnFitTime=True, saveEstimator=model_name)
     print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
 
     print("\nTesting del modello...\n")
@@ -133,7 +136,7 @@ print(f"\nSecondo l'accuracy, il migliore modello è {best_model}, con uno score
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=89, stratify=Y)
 
-print(f"\nAddestramento di {best_model} ricercando i parametri migliori...")
+print(f"\nAddestramento di {best_model} ricercando la configurazione migliore...")
 model, fitTime = trainClassificator(X_train, Y_train, model=best_model, returnFitTime=True, findBestEstimator=True, saveEstimator=f"{best_model}_best")
 print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
 
@@ -142,7 +145,7 @@ predictionTime = testClassificator(X_test, Y_test, model, returnPredictionTime=T
 print(f"\nTesting concluso in {round(predictionTime, 2)} secondi")
 print("---------------------------------------------")
 
-"""
+
 # Addestramento dei modelli di clustering
 print("\n---------------------------------------------")
 

@@ -176,14 +176,14 @@ def testClassificator(X_test, Y_test, model, returnPredictionTime=True, saveConf
     if saveConfusionMatrix:     # Se saveConfusionMatrix = True, creo il plot della matrice di confusione
         cm = confusion_matrix(Y_test, prediction, labels=model.classes_)
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
-        disp.plot(xticks_rotation="vertical")
-        fig = disp.figure_
-        fig.set_figwidth(8)
-        fig.set_figheight(6)
+        fig, ax = plt.subplots(figsize=(8, 6))
+
         fig.suptitle('Matrice di confusione', fontsize=15)
         plt.ylabel('Categoria reale', fontsize=12)
         plt.xlabel('Categoria predetta', fontsize=12)
-        plt.savefig(f"Plots/{saveConfusionMatrix}.png")
+        plt.tight_layout()
+        disp.plot(ax=ax, xticks_rotation="vertical")
+        plt.savefig(f"Plots/{saveConfusionMatrix}.png", bbox_inches="tight")
         print(f"Memorizzata la matrice di confusione in: /Plots/{saveConfusionMatrix}.png")
 
     if returnPredictionTime:

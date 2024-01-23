@@ -128,30 +128,32 @@
     Il Data Cleaning è la fase durante la quale ci si occupa di "pulire" il dataset mantenendo solo i dati più completi e chiari. Da una prima osservazione dei dati è stata rilevata la presenza di due aspetti che possono ostacolare la corretta esecuzione dei metodi di classificazione e degli algoritmi di clustering che saranno implementati successivamente. Le operazioni svolte sui dati sono state svolte tramite la funzione "clearData". La prima correzione effettuata è stata l'eliminazione dei campi nulli presenti in alcune righe in modo da ottenere un dataset completo senza dati mancanti. Successivamente è stata eseguita l'eliminazione delle righe duplicate e di quelle non significative poiché non contribuiscono a migliorare la Classificazione e il Clustering. Per decidere quali sono le frasi non significative è stato utilizzato il parametro "des\textunderscore{}threshold" che indica un limite. Se le frasi contengono un numero di caratteri inferiore a "des\textunderscore{}treshold" allora verranno considerate non significative. La funzione "clearData" applica la prima e la seconda operazione sui dati delle features: Descrizioni e autori, mentre la terza operazione verrà eseguita solo sulla feature delle descrizioni poiché applicarla agli autori risulta inutile e controproducente. 
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/cleanData.png}
+    \newpage
     \begin{justify}
-    %da aggiungere
-    %le stopwords ricavate da libreria nltk e altre aggiunte
-    %correggi lemmatizzazione e stemming
-    %lemmatizzazione non applicata agli autori per non rovinare le parole 
-    Lavorare su dati testuali significa lavorare sul Natural Language. Quest'aspetto implica una sequenza di azioni di normalizzazione da applicare sulle descrizioni dei libri e sugli autori. Le funzioni "preprocessAuthors" e "preprocessDescription" si occupano di svolgere queste azioni. La funzione "preprocessAuthors" esegue tre operazioni: i caratteri verrano resi tutti minuscoli in modo da rendere i dati testuali più uniformi e leggibili, verrà eliminata la punteggiatura per eliminare il rumore e l'ultima è l'eliminazione delle stop words. Tramite l'utilizzo delle librerie NLTK sono state individuate le stop words e sono state successivamente aggiunte ai file "authors\textunderscore{}stopwords.txt" e "description\textunderscore{}stopwords.txt" in modo da distinguere le stop words all'interno delle features "autori" e "descrizioni". 
+    Lavorare su dati testuali significa lavorare sul Natural Language. Quest'aspetto implica una sequenza di azioni di normalizzazione da applicare sulle descrizioni dei libri e sugli autori. Le funzioni "preprocessAuthors" e "preprocessDescription" si occupano di svolgere queste azioni.
+    \end{justify}
+    \begin{justify}
+    La funzione "preprocessAuthors" esegue tre operazioni: i caratteri verrano resi tutti minuscoli in modo da rendere i dati testuali più uniformi e leggibili, verrà eliminata la punteggiatura per eliminare il rumore e l'ultima è l'eliminazione delle stop words. Tramite l'utilizzo delle librerie NLTK sono state individuate le stop words e sono state successivamente aggiunte ai file "authors\textunderscore{}stopwords.txt" e "description\textunderscore{}stopwords.txt" in modo da distinguere le stop words all'interno delle features "autori" e "descrizioni". 
+    \end{justify}
+    \includegraphics[width=0.95\textwidth]{pics/preprocessAuthors.png}
+    \newpage
+    \begin{justify}
     La funzione "preprocessDescrition" eseguirà le stesse operazioni svolte da "preprocessAuthors" occupandosi, però, di svolgere anche la lemmatizzazione. La lemmatizzazione è una tecnica che permette la riduzione delle parole nella loro forma radice considerando sia la grammatica che il significato (esempio: playing in play). 
-    In conclusione, dopo la fase di Data Cleaning, avremmo un database completo e leggibile che garantisca sia la qualità che la quantità dei dati. 
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/preprocessDescription.png}
+    \begin{justify}
+    In conclusione, dopo la fase di Data Cleaning, avremmo un database completo e leggibile che garantisca sia la qualità che la quantità dei dati. 
+    \end{justify}
     \end{enumerate}
-    
     
 
     \begin{enumerate}
     \subsection{Feature Selection}
     \begin{justify}
-    %aggiungi
-    %genere utilizzata come variabile dipendente
     Il dataset orginale presentava sette features diverse: Title, Authors, Description, Category, Publisher, Publish Date e Price. Per lo scopo del nostro progetto verrano prese in considerazioni solo le feature che contengono: il titolo, per una questione di chiarezza, la descrizione e gli autori, poiché sono le due caratteristiche che utilizzeremo per predirre il genere del libro, e il genere per organizzare i libri e valutare se la predizione ha dato esito positivo.
     \end{justify}
     \end{enumerate}
 
-    %\newpage
     \begin{enumerate}
     \subsection{Bilanciamento dataset}
     \begin{justify}

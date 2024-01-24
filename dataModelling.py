@@ -78,8 +78,8 @@ def trainClassificator(X_train, Y_train, model = "LinearSVC", findBestEstimator 
         trainedModel = modelPipe
 
     if saveEstimator:       # Se saveEstimator = True, serializzo il classificatore all'interno di un apposito file
-        dump(trainedModel, f"Models/{saveEstimator}.joblib")
-        print(f"Classificatore {model} serializzato all'interno del seguente file: /Models/{saveEstimator}.joblib")
+        dump(trainedModel, f"Models/Classificators/{saveEstimator}.joblib")
+        print(f"Classificatore {model} serializzato all'interno del seguente file: /Models/Classificators/{saveEstimator}.joblib")
 
     if returnFitTime:
         return trainedModel, fitTime
@@ -243,8 +243,8 @@ def trainClusters(X, model, findBestEstimator = False, returnFitTime = True, sav
         trainedModel = modelPipe
 
     if saveEstimator:  # Se saveEstimator = True, serializzo il classificatore all'interno di un apposito file
-        dump(trainedModel, f"Models/{saveEstimator}.joblib")
-        print(f"Clusterer {model} serializzato all'interno del seguente file: /Models/{saveEstimator}.joblib")
+        dump(trainedModel, f"Models/Clusterers/{saveEstimator}.joblib")
+        print(f"Clusterer {model} serializzato all'interno del seguente file: /Models/Clusterers/{saveEstimator}.joblib")
 
     if returnFitTime:
         return trainedModel, fitTime

@@ -5,7 +5,7 @@ from joblib import load  # Permette di recuperare un oggetto serializzato in un 
 from dataPreparation import preprocessAuthors, preprocessDescription   # Necessari per processari i dati inseriti dall'utente
 
 # Recupero i nomi dei modelli precedentemente addestrati e serializzati
-modelNames = [modelName.replace(".joblib", "") for modelName in listdir("Models") if ".joblib" in modelName]
+modelNames = [modelName.replace(".joblib", "") for modelName in listdir("Models/Classificators") if ".joblib" in modelName]
 
 if len(modelNames) == 0:        # Se non ci sono modelli addestrati, arresto il programma
     exit("Non sono disponibili modelli di classificazione addestrati")
@@ -56,7 +56,7 @@ with open('stopwords/authors_stopwords.txt', 'r') as fd:      # Recupero le stop
 preprocessDescription(toPredict, description_stopwords)    # Processo descrizioni e autori
 preprocessAuthors(toPredict, authors_stopwords)
 
-model = load(f"Models/{selection}.joblib")  # Recupero il modello serializzato indicato
+model = load(f"Models/Classificators/{selection}.joblib")  # Recupero il modello serializzato indicato
 predictions = model.predict(toPredict)  # Calcolo le predizioni
 
 print("\nPredizioni:")  # Stampo le predizioni

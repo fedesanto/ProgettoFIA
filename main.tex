@@ -71,7 +71,7 @@
     \subsection{Scopo del progetto}
     \begin{justify}
 
-        Il nostro progetto si pone come obiettivo lo studio e la sperimentazione di differenti tecniche di Machine Learning capaci di analizzare ed estrarre informazioni da dati sotto forma di linguaggio naturale. Nello specifico si è interessati alla categorizzazione di libri tramite una breve descrizione testuale ed un elenco di autori. La categorizzazione è stata elaborata tramite due tecniche di Machine Learning, Classificazione e Clustering, che, seppur facenti utilizzo di due approcci diversi (rispettivamente apprendimento supervisionato e apprendimento non supervisionato), in linea teorica dovrebbero essere in grado di riportare risultati similari e confrontabili. A tal proposito occorrerà addestrare più modelli differenti per entrambe le tecniche e verificare quali di questi permette di ottenere il miglior risultato.
+        Il nostro progetto si pone come obiettivo lo studio e la sperimentazione di differenti tecniche di Machine Learning capaci di analizzare ed estrarre informazioni da dati sotto forma di linguaggio naturale. Nello specifico si è interessati alla categorizzazione di libri tramite una breve descrizione testuale ed un elenco di autori. La categorizzazione è stata elaborata tramite due tecniche di Machine Learning: Classificazione e Clustering, che, seppur facenti utilizzo di due approcci diversi (rispettivamente apprendimento supervisionato e apprendimento non supervisionato), si considerano in grado di riportare risultati similari e confrontabili. A tal proposito occorrerà addestrare più modelli differenti riguardanti entrambe le tecniche e verificare quali di questi permetterà di ottenere il miglior risultato.
 
     \end{justify}
     \end{enumerate}
@@ -87,16 +87,16 @@
     \begin{longtable}{ | p{3cm} | p{11cm} | }\hline
     \multicolumn{2}{|c|}{PEAS} \\ \hline
     \rowcolor{lightblue}
-    Performance & La misura di prestazione è la capacità di avvicinarsi quanto più possibile al corretto genere del libro in questione. È necessario utilizzare misure di prestazione differenti per valutare Classificazione e Clustering. Nel caso della Classificazione si è usato: Accuratezza, Report di classificazione, che comprendono Precisione, Recall e F1-score per ciascuna classe, e una Matrice di  confusione. Per il clustering, invece,  si è utilizzato il Silhouette Score.\\
+    \textbf{Performance} & La misura di prestazione è la capacità di avvicinarsi quanto più possibile al corretto genere di un libro specifico. È necessario utilizzare misure di prestazione differenti con lo scopo di valutare gli algoritmi di Classificazione e Clustering. Nel caso della Classificazione si è usato: accuratezza e report di classificazione. Quest'ultimo comprende la misura di precisione, recall, f1-score (per ciascuna classe) e una matrice di  confusione tramite la quale è possibile visualizzare l'andamento degli algoritmi. Per il clustering, invece,  si è utilizzato il Silhouette Score.\\
     \hline
     \rowcolor{lightsteelblue}
-    \textbf{Environment} & I nostri modelli sono stati realizzati e operano nell'ambiente di sviluppo PyCharm il quale presenta le seguenti caratteristiche: \begin{itemize}
-        \item \textbf{completamente osservabile}: il modello ha la visione completa del dataset e degli attributi associati a ciascun libro.
-        \item \textbf{deterministico}: una volta addestrato un modello, la variazione dello stato dell'ambiente rimane la stessa a fronte degli stessi input.
+    \textbf{Environment} & I modelli presi in considerazione sono stati realizzati e operano nell'ambiente di sviluppo "PyCharm" avente le seguenti caratteristiche: \begin{itemize}
+        \item \textbf{completamente osservabile}: il modello ha la visione completa del dataset, nello specifico degli attributi associati a ciascun libro.
+        \item \textbf{deterministico}: una volta addestrato un modello, lo stato dell'ambiente non varia a fronte degli stessi input.
         \item \textbf{episodico}: l'agente delibera a fronte di determinati episodi che consistono in nuove richieste di predizione.
         \item \textbf{statico}: l'ambiente resta invariato mentre l'agente opera.
-        \item \textbf{discreto}: viene fornito un insieme discreto di informazioni per ciascun libro.
-        \item \textbf{singolo}: l'ambiente permette di addestrare più modelli ma questi vengono valutati singolarmente.
+        \item \textbf{discreto}: è fornito un insieme discreto di informazioni per ciascun libro.
+        \item \textbf{singolo}: l'ambiente permette di addestrare più modelli valutati singolarmente.
     \end{itemize}
     \hline
     \rowcolor{lightblue}
@@ -105,7 +105,7 @@
     \item grafici esplicativi: mostrano informazioni di vario tipo, tra cui analisi del dataset e risultati ottenuti dalle predizioni dei modelli.\end{itemize}
     \hline
     \rowcolor{lightsteelblue}
-    \textbf{Sensors} & I modelli ricevono le informazioni necessarie per l'addestramento tramite un file contenente il dataset. Inoltre è possibile specificare tramite console nuovi dati su cui effetturare nuove predizioni. \\
+    \textbf{Sensors} & I modelli ricevono le informazioni necessarie per l'addestramento tramite un file in formato csv contenente il dataset. Inoltre, è possibile specificare, grazie all'utilizzo della console, nuovi dati su cui effetturare nuove predizioni. \\
     \hline
     \caption{Tabella della specifica PEAS}
     \end{longtable}
@@ -125,35 +125,96 @@
     \begin{enumerate}
     \subsection{Data cleaning}
     \begin{justify}
-    Il Data Cleaning è la fase durante la quale ci si occupa di "pulire" il dataset mantenendo solo i dati più completi e chiari. Da una prima osservazione dei dati è stata rilevata la presenza di due aspetti che possono ostacolare la corretta esecuzione dei metodi di classificazione e degli algoritmi di clustering che saranno implementati successivamente. Le operazioni svolte sui dati sono state svolte tramite la funzione "clearData". La prima correzione effettuata è stata l'eliminazione dei campi nulli presenti in alcune righe in modo da ottenere un dataset completo senza dati mancanti. Successivamente è stata eseguita l'eliminazione delle righe duplicate e di quelle non significative poiché non contribuiscono a migliorare la Classificazione e il Clustering. Per decidere quali sono le frasi non significative è stato utilizzato il parametro "des\textunderscore{}threshold" che indica un limite. Se le frasi contengono un numero di caratteri inferiore a "des\textunderscore{}treshold" allora verranno considerate non significative. La funzione "clearData" applica la prima e la seconda operazione sui dati delle features: Descrizioni e autori, mentre la terza operazione verrà eseguita solo sulla feature delle descrizioni poiché applicarla agli autori risulta inutile e controproducente. 
+    Nella fase di Data Cleaning ci si occupa di "pulire" il dataset mantenendo solo i dati utili all'addestramento del modello. Da una prima osservazione dei dati è stata rilevata la presenza di due aspetti che possono ostacolare la corretta esecuzione degli algoritmi di classificazione e di clustering, che saranno implementati successivamente. La funzione "clearData" si occupa della pulizia dei dati, con le seguenti operazioni: 
+    \begin{enumerate}[label=\arabic*)]
+        \item eliminazione dei campi nulli. In tal modo si è ottenuto un dataset senza dati mancanti.
+        \item eliminazione delle righe duplicate.
+        \item eliminazione delle righe non significative. Per identificare le frasi non significative è stato utilizzato il parametro "des\textunderscore{}threshold" che indica un limite. Se le frasi contengono un numero di caratteri inferiore a "des\textunderscore{}treshold" allora verranno considerate non significative.
+    \end{enumerate}
+    La funzione "clearData" applica la prima e la seconda operazione su tutti i dati presenti all'interno del dataset. Mentre la terza operazione verrà eseguita solo sulla feature delle descrizioni, in quanto applicarla agli autori potrebbe risultare controproducente. 
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/cleanData.png}
+    
+    \newpage
     \begin{justify}
-    %da aggiungere
-    %le stopwords ricavate da libreria nltk e altre aggiunte
-    %correggi lemmatizzazione e stemming
-    %lemmatizzazione non applicata agli autori per non rovinare le parole 
-    Lavorare su dati testuali significa lavorare sul Natural Language. Quest'aspetto implica una sequenza di azioni di normalizzazione da applicare sulle descrizioni dei libri e sugli autori. Le funzioni "preprocessAuthors" e "preprocessDescription" si occupano di svolgere queste azioni. La funzione "preprocessAuthors" esegue tre operazioni: i caratteri verrano resi tutti minuscoli in modo da rendere i dati testuali più uniformi e leggibili, verrà eliminata la punteggiatura per eliminare il rumore e l'ultima è l'eliminazione delle stop words. Tramite l'utilizzo delle librerie NLTK sono state individuate le stop words e sono state successivamente aggiunte ai file "authors\textunderscore{}stopwords.txt" e "description\textunderscore{}stopwords.txt" in modo da distinguere le stop words all'interno delle features "autori" e "descrizioni". 
-    La funzione "preprocessDescrition" eseguirà le stesse operazioni svolte da "preprocessAuthors" occupandosi, però, di svolgere anche la lemmatizzazione. La lemmatizzazione è una tecnica che permette la riduzione delle parole nella loro forma radice considerando sia la grammatica che il significato (esempio: playing in play). 
-    In conclusione, dopo la fase di Data Cleaning, avremmo un database completo e leggibile che garantisca sia la qualità che la quantità dei dati. 
+    Dopo una successiva analisi del dataset e delle categorie presenti al suo interno, si è notata la presenza di alcune categorie similari. Per assicurarci una predizione ottimale del genere è necessario identificare le categorie nella loro unicità. A tale scopo viene utilizzata la funzione "renameCategories". Essa si occupa di rinominare le categorie utilizzando una lista di rinominazioni.
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/renameCategories.png}
+
+    \begin{minipage}[t]{0.39\textwidth}
+    \vspace{30pt}
+    Di lato è mostrata la lista passata alla funzione "renameCategories":
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.50\textwidth}
+    \vspace{20pt}
+    \includegraphics[width=1\textwidth]{pics/rinominoCategorie.png}
+    \end{minipage}
+    
+    \begin{justify}
+    Sono state selezionate sedici categorie differenti. Tale selezione è stata effettuata prendendo in considerazione la frequenza della ricorrenza di ciascuna categoria. Questo ha portato all' eliminazione di categorie aventi troppi pochi dati per permettere ai modelli di ottenere un buon riconoscimento della categoria stessa. Tale operazione viene effettuata tramite la funzione "extractCategories".
+    \end{justify}
+
+    \begin{justify}
+    La seguente funzione si occupa di estrarre le categorie di interesse in modo da poter eliminare tutte quelle righe non appartenenti ad esse. 
+    Per ogni riga vengono svolte le seguenti azioni:
+    \begin{itemize}
+        \item estrarre tutte le categorie separate da ',';
+        \item se nessuna delle categorie estratte appartiene a 'toExtract', allora la riga viene eliminata;
+        \item tra le categorie che fanno parte di 'toExtact', viene assegnato al campo "Category" quella che ha meno esempi nel dataframe.
+    \end{itemize}
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/extractCategories.png}
+
+    \begin{justify}
+    Di seguito sono mostrate le categorie estratte: 
+    \end{justify}
+    \includegraphics[width=0.95\textwidth]{pics/listaCategories.png}
+
+    \begin{justify}
+    Lavorare su dati testuali significa lavorare sul Natural Language. Quest'aspetto implica una sequenza di azioni di normalizzazione da applicare sulle descrizioni e sugli autori. Ma prima di normalizzare i dati risulta più efficiente eseguire un'operazione di bilanciamento del dataset (vedere paragrafo ~\ref{bil}) nel quale vengono eliminate le righe di quelle categorie troppo frequenti.
+    Le operazioni di normalizzazione sono svolte dalle funzioni "preprocessAuthors" e "preprocessDescription". Queste funzioni utizzano le stop words che vengono identificate prima della loro esecuzione. Tramite l'utilizzo delle librerie NLTK sono state individuate le stop words e sono state successivamente aggiunte ai file "authors\textunderscore{}stopwords.txt" e "description\textunderscore{}stopwords.txt" in modo da distinguere le stop words all'interno delle features "autori" e "descrizioni". 
+    \end{justify}
+    \newpage
+    \begin{justify}
+    \hypertarget{preD}{
+    La funzione "preprocessDescrition" esegue le seguenti operazioni:
+    \begin{itemize}
+        \item i caratteri vengono resi tutti minuscoli in modo da rendere i dati testuali più uniformi e leggibili;
+        \item eliminazione della punteggiatura per eliminare il rumore;
+        \item eliminazione delle stop words;
+        \item lemmatizzazione, una tecnica che permette la riduzione delle parole nella loro forma radice considerando sia la grammatica che il significato (esempio: playing in play).
+    \end{itemize}
+    }
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/preprocessDescription.png}
-    \end{enumerate}
+    \newpage
+    \begin{justify}
+    \hypertarget{preA}{
+    La funzione "preprocessAuthors" eseguirà le stesse prime tre operazioni di "preprocessDescription".
+    }
+    \end{justify}
     
+    \includegraphics[width=0.95\textwidth]{pics/preprocessAuthors.png}
+    \begin{justify}
+    Per illustrare la corretta esecuzione delle due funzioni mostrate precedentemente vengono utilizzate le WordCloud (vedere cap). Queste vengono utilizzate per osservare facilmente come i dati testuali siano cambiati e resi più semplci e funzionali.
+    In conclusione, dopo la fase di Data Cleaning, avremmo un database completo e leggibile che garantisca sia la qualità che la quantità dei dati. 
+    \end{justify}
+    \end{enumerate}
     
 
     \begin{enumerate}
     \subsection{Feature Selection}
     \begin{justify}
-    %aggiungi
-    %genere utilizzata come variabile dipendente
     Il dataset orginale presentava sette features diverse: Title, Authors, Description, Category, Publisher, Publish Date e Price. Per lo scopo del nostro progetto verrano prese in considerazioni solo le feature che contengono: il titolo, per una questione di chiarezza, la descrizione e gli autori, poiché sono le due caratteristiche che utilizzeremo per predirre il genere del libro, e il genere per organizzare i libri e valutare se la predizione ha dato esito positivo.
     \end{justify}
     \end{enumerate}
 
-    %\newpage
+    \newpage
     \begin{enumerate}
-    \subsection{Bilanciamento dataset}
+    \subsection{Bilanciamento dataset}\label{bil}
     \begin{justify}
     %sistema l'ordine
     Da una prima osservazione del grafico, che mostra i libri divisi nei 20 generi, si può notare lo sbilanciamento del dataset. 
@@ -174,9 +235,9 @@
     \end{figure}
     
     \begin{justify}
-    Come è possibile notare dalla 'Figure 2' il dataset non risulta completamente bilanciato. Questo risultato è dovuto alla natura stessa del dataset. Per ottenere un dataset bilanciato si sarebbero dovute eliminare molte informazioni, non avendo così più a disposizione abbastanza dati per addestrare i nostri modelli.\\
+    Come si nota dalla 'Figure 2' il dataset non risulta completamente bilanciato. Questo risultato è dovuto alla natura stessa del dataset. Per ottenere un dataset bilanciato si sarebbero dovute eliminare molte informazioni, non avendo così più a disposizione abbastanza dati per addestrare i nostri modelli.\\
     \end{justify}
-    \hfill
+    
     \begin{justify}
     Il bilanciamento del dataset è stato effettuato tramite la funzione "balanceCategories", la quale verifica il numero di righe per ogni categoria ed elimina casualmente delle righe di categorie con più di 'threshold' esempi.
     \end{justify}
@@ -216,9 +277,8 @@
 
     %\hfill
     \begin{justify}
-    Tale illustrazione ci permette di analizzare con più semplicità le parole ricorrenti ed individuare delle stop words aggiuntive, che fanno riferimento al dataset in questione, come ad esempio "book" e "life". Allo stesso ragionamento vengono sottoposti gli autori.Per le stop words aggiuntive inerenti alla descrizione e agli autori sono stati creati due nuovi file di testo, chiamati rispettivamente "description\textunderscore{}stopwords.txt" e "authors\textunderscore{}stopwords.txt". Ecco le stop word individuate:
+    Tale illustrazione ci permette di analizzare con più semplicità le parole ricorrenti ed individuare delle stop words aggiuntive, che fanno riferimento al dataset in questione, come ad esempio "book" e "life". Allo stesso ragionamento vengono sottoposti gli autori. Per le stop words aggiuntive, inerenti alla descrizione e agli autori, sono stati creati due nuovi file di testo, chiamati rispettivamente "description\textunderscore{}stopwords.txt" e "authors\textunderscore{}stopwords.txt". Ecco le stop word individuate:
     \end{justify}
-    %\includegraphics[width=0.10\textwidth]{pics/aggiuntaStopWordsDescription.png}
     
     \begin{figure}[H]
     \begin{subfigure}{0.15\textwidth}
@@ -241,7 +301,7 @@
 
     \newpage
     \begin{justify}
-    Con la successiva eliminazione delle stop words individuate, si ottiene il seguente word cloud:
+    L'eliminazione delle stop words avviene tramite le funzioni \hyperlink{preD}{"preprocessDescription"}, per le descrizioni, e \hyperlink{preA}{"preprocessAuthors"}, per gli autori. Si ottiene il seguente word cloud riguardanti le descrizioni:
     \end{justify}
     \begin{figure}[H]
     \centering
@@ -307,45 +367,71 @@
 
 \section{Clustering}
     \begin{justify}
-        Allo scopo di effettuare un confronto più coerente con gli algoritmi di Classificazione, sono stati selezionati degli algoritmi di Clustering per cui il numero di cluster venisse impostato a priori. I modelli selezionati e addestrati sul dataset sono stati: K-Means, Mini-Batch KMeans e Spectral Clustering.
+        Nel contesto dell'analisi e dell'organizzazione di un vasto insieme di libri provenienti da un dataset contenente descrizioni e informazioni sugli autori, il Clustering, basato sulle regole dell'apprendimento non supervisionato, si presenta, in linea teorica, come un buon approccio alternativo alla classificazione. Questa metodologia ci offre la possibilità di organizzare i libri in gruppi sfruttando contemporaneamente le somiglianze semantiche nelle descrizioni e le ricorrenze degli autori per ogni cluster in modo da creare connessioni significative tra opere affini. Conoscendo a priori il numero di categorie differenti presenti nel dataset (16), si è adottato un approccio che coinvolge algoritmi di Clustering in cui il numero di gruppi risultanti al termine sia preimpostato come iperparametro. Di conseguenza, questa scelta ci ha permesso di effettuare anche un confronto più accurato con gli algoritmi di Classificazione. I modelli selezionati e addestrati sul dataset sono stati: K-Means, Mini-Batch KMeans e Spectral Clustering.
     \end{justify}
     \begin{enumerate}
     \subsection{Algoritmo K-Means}
     \begin{justify}
-        L'algoritmo K-Means ha la funzione di assegnare oggetti ad un determinato cluster in modo che ci sia omogeneità tra gli oggetti nello stesso cluster ed eterogeneità tra gli oggetti in cluster diversi. È possibile descrivere questo algoritmo tramite i seguenti step:\\
-    1) Scegliere in modo casuale K punti nel dataset che saranno i centroidi iniziali;\\
-    2) Generare un partizionamento assegnando ogni campione al centroide più vicino;\\
-    3) Calcolare i nuovi centroidi del cluster considerando la media dei valori del cluster generato al punto 2;\\
-    4) Ripetere i passi 2 e 3 fino a quando i centroidi non varieranno più.
+        L'algoritmo K-Means raggruppa i dati cercando di separare i campioni in K gruppi di uguale varianza minimizzando un criterio, noto come “somma dei quadrati”, all'interno del cluster. Possiamo descrivere questo procedimento con i seguenti step:
+        \begin{enumerate}[label=\arabic*)]
+            \item Scegliere in modo casuale K punti nel dataset come centroidi iniziali;
+            \item Generare un partizionamento assegnando ogni campione al centroide più vicino;
+            \item Calcolare i nuovi centroidi del cluster considerando la media dei valori del cluster generato al punto 2;
+            \item Ripetere i passi 2 e 3 fino a quando i centroidi non cambino;
+        \end{enumerate}
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Algoritmo MiniBatchKMeans}
     \begin{justify}
-         L'algoritmo MiniBatchKMeans è una variante dell'algoritmo K-Means standard che utilizza minibatch, ovvero sottoinsiemi di dati di input campionati casualmente in ogni iterazione di training, di campioni per aggiornare i centroidi invece di utilizzare l'intero set di dati. Questo approccio rende Mini-Batch K-Means più efficiente computazionalmente, permettendo di lavorare su dataset più grandi. A differenza di altri algoritmi che riducono il tempo di convergenza, il mini-batch kmeans produce risultati che generalmente risultano leggermente peggiori rispetto all’algoritmo standard. È possibile descrivere l'algoritmo in questione tramite i seguenti step:\\
-    1) Scegliere in modo casuale K punti nel dataset che saranno i centroidi iniziali;\\
-    2) Selezionare casualmente un minibatch di dimensione prefissata dal dataset, generare un partizionamento           assegnando ogni suo campione al centroide più vicino e infine aggiornare i centroidi usando la media dei punti nel minibatch corrente;\\
-    3) Per ciascun cluster, calcolare i nuovi centroidi come la media dei punti assegnati a quel cluster;\\
-    4) Ripetere i passi 2 e 3 fino a quando i centroidi non varieranno più.
+    L'algoritmo MiniBatchKMeans è una variante dell'algoritmo K-Means standard che utilizza minibatch di campioni. Quest'ultimi sono sottoinsiemi di dati input, campionati casualmente in ogni iterazione di training, utilizzati per aggiornare i centroidi invece di utilizzare l'intero set di dati. Quest'approccio rende Mini-Batch K-Means più efficiente dal punto di vista computazionale permettendo di lavorare su dataset più grandi rispetto al K-Means tradizionale. A differenza di altri algoritmi, che riducono il tempo di convergenza, il Mini-Batch K-Means produce risultati che generalmente sono solo lievemente peggiori rispetto all’algoritmo standard. 
+    Possiamo descrivere questo algoritmo con i seguenti step:
+    \begin{enumerate}[label=\arabic*)]
+        \item Scegliere in modo casuale K punti nel dataset come centroidi iniziali;
+        \item Ad ogni iterazione, seleziona casualmente un minibatch di dimensione prefissata dal dataset;
+        \item Genera un partizionamento assegnando ogni campione del minibatch al centroide più vicino;
+        \item Aggiorna i centroidi usando la media dei punti nel minibatch corrente;
+        \item Vengono ripetuti i passi da 2 a 4 fino a quando i centroidi non cambiano;
+    \end{enumerate}
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Algoritmo SpectralClustering}
     \begin{justify}
-        L'algoritmo SpectralClustering sfrutta il concetto di teoria spettrale (legata allo studio delle funzioni analitiche) e consente la gestione di strutture complesse e non lineari di dati. Utilizza la similarità tra i punti del dataset per costruire un grafo, per poi trasformarlo in uno spazio di dimensioni inferiori attraverso una procedura basata sugli autovettori. Infine, applica un algoritmo di clustering (ad esempio K-Means) nello spazio trasformato per raggruppare i punti in cluster.
+    L'algoritmo SpectralClustering si basa sulla teoria spettrale, ovvero una branca matematica legata allo studio delle proprietà degli spettri degli operatori lineari. Quest' approccio offre un modo potente per affrontare strutture complesse e non lineari nei dati, le quali non possono essere gestite adeguatamente da metodi più tradizionali come K-Means. 
+    Il processo di funzionamento può essere suddiviso in diverse fasi:
+    \begin{enumerate}[label=\arabic*)]
+        \item Utilizzando la similarità tra i punti del dataset (calcolata ad esempio utilizzando la distanza euclidea tra i punti), viene costruito un grafo;
+        \item Sfruttando la teoria spettrale, il grafo viene trasformato in uno spazio di dimensioni inferiori attraverso la procedura degli autovettori e degli autovalori.
+        \item Una volta ottenuto lo spazio trasformato, viene applicato un algoritmo di Clustering, come ad esempio K-Means, per raggruppare i punti in cluster. 
+        \item I risultati dell'algoritmo di Clustering vengono utilizzati per assegnare ciascun punto del dataset a un cluster specifico. La coerenza e la separazione dei cluster dipendono dalla capacità della trasformazione spettrale di rivelare pattern significativi nei dati.
+    \end{enumerate}
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Valutazione del Clustering: Silhouette score}
     \begin{justify}
-        Allo scopo di valutare gli algoritmi di clustering ne è stato calcolato il rispettivo Silhoutte score, il cui valore oscilla tra -1, per clustering errato, e +1, per clustering altamente denso. Invece i punteggi intorno allo 0 indicano la presenza di clusters sovrapposti. 
-        In seguito, si ha avuto cura di ricercare in maniera randomica gli iperparametri migliori del modello con lo score più alto.
+        Una volta ottenuti i gruppi di elementi, si analizza il Silhouette Score con lo scopo di ricavare informazioni sulla coesione degli elementi dei singoli gruppi e sulla separazione tra di essi. Questa metrica di stima presenta un valore compreso nell’intervallo [-1,+1], dove:
+        \begin{itemize}
+            \item $-1$: indica clustering errato;
+    	\item  $0$: indica cluster sovrapposti;
+    	\item $+1$: indica clustering altamente denso;
+        \end{itemize}
+        Dal punto di vista matematico, il Silhouette Score è definito dalla formula:
+        \[
+        S(i) = \frac{b(i) - a(i)}{\max(b(i), a(i)}
+        \]
+        Dove $b(i)$ è la distanza media dal punto $i$ a tutti gli altri punti del cluster più vicino e $a(i)$ è la distanza media dal punto $i$ a tutti gli altri punti dello stesso cluster.
+        Il valore finale sarà poi ottenuto come la media di tutti i singoli coefficienti di Silhouette.
     \end{justify}
     \end{enumerate}
 
+     \begin{enumerate}
+     \subsection{Ottimizzazione}
+     \end{enumerate}
 \section{Conclusioni}
 
     

@@ -71,7 +71,7 @@
     \subsection{Scopo del progetto}
     \begin{justify}
 
-        Il nostro progetto si pone come obiettivo lo studio e la sperimentazione di differenti tecniche di Machine Learning capaci di analizzare ed estrarre informazioni da dati sotto forma di linguaggio naturale. Nello specifico si è interessati alla categorizzazione di libri tramite una breve descrizione testuale ed un elenco di autori. La categorizzazione è stata elaborata tramite due tecniche di Machine Learning, Classificazione e Clustering, che, seppur facenti utilizzo di due approcci diversi (rispettivamente apprendimento supervisionato e apprendimento non supervisionato), in linea teorica dovrebbero essere in grado di riportare risultati similari e confrontabili. A tal proposito occorrerà addestrare più modelli differenti per entrambe le tecniche e verificare quali di questi permette di ottenere il miglior risultato.
+        Il nostro progetto si pone come obiettivo lo studio e la sperimentazione di differenti tecniche di Machine Learning capaci di analizzare ed estrarre informazioni da dati sotto forma di linguaggio naturale. Nello specifico si è interessati alla categorizzazione di libri tramite una breve descrizione testuale ed un elenco di autori. La categorizzazione è stata elaborata tramite due tecniche di Machine Learning: Classificazione e Clustering, che, seppur facenti utilizzo di due approcci diversi (rispettivamente apprendimento supervisionato e apprendimento non supervisionato), si considerano in grado di riportare risultati similari e confrontabili. A tal proposito occorrerà addestrare più modelli differenti riguardanti entrambe le tecniche e verificare quali di questi permetterà di ottenere il miglior risultato.
 
     \end{justify}
     \end{enumerate}
@@ -87,16 +87,16 @@
     \begin{longtable}{ | p{3cm} | p{11cm} | }\hline
     \multicolumn{2}{|c|}{PEAS} \\ \hline
     \rowcolor{lightblue}
-    Performance & La misura di prestazione è la capacità di avvicinarsi quanto più possibile al corretto genere del libro in questione. È necessario utilizzare misure di prestazione differenti per valutare Classificazione e Clustering. Nel caso della Classificazione si è usato: Accuratezza, Report di classificazione, che comprendono Precisione, Recall e F1-score per ciascuna classe, e una Matrice di  confusione. Per il clustering, invece,  si è utilizzato il Silhouette Score.\\
+    \textbf{Performance} & La misura di prestazione è la capacità di avvicinarsi quanto più possibile al corretto genere di un libro specifico. È necessario utilizzare misure di prestazione differenti con lo scopo di valutare gli algoritmi di Classificazione e Clustering. Nel caso della Classificazione si è usato: accuratezza e report di classificazione. Quest'ultimo comprende la misura di precisione, recall, f1-score (per ciascuna classe) e una matrice di  confusione tramite la quale è possibile visualizzare l'andamento degli algoritmi. Per il clustering, invece,  si è utilizzato il Silhouette Score.\\
     \hline
     \rowcolor{lightsteelblue}
-    \textbf{Environment} & I nostri modelli sono stati realizzati e operano nell'ambiente di sviluppo PyCharm il quale presenta le seguenti caratteristiche: \begin{itemize}
-        \item \textbf{completamente osservabile}: il modello ha la visione completa del dataset e degli attributi associati a ciascun libro.
-        \item \textbf{deterministico}: una volta addestrato un modello, la variazione dello stato dell'ambiente rimane la stessa a fronte degli stessi input.
+    \textbf{Environment} & I modelli presi in considerazione sono stati realizzati e operano nell'ambiente di sviluppo "PyCharm" avente le seguenti caratteristiche: \begin{itemize}
+        \item \textbf{completamente osservabile}: il modello ha la visione completa del dataset, nello specifico degli attributi associati a ciascun libro.
+        \item \textbf{deterministico}: una volta addestrato un modello, lo stato dell'ambiente non varia a fronte degli stessi input.
         \item \textbf{episodico}: l'agente delibera a fronte di determinati episodi che consistono in nuove richieste di predizione.
         \item \textbf{statico}: l'ambiente resta invariato mentre l'agente opera.
-        \item \textbf{discreto}: viene fornito un insieme discreto di informazioni per ciascun libro.
-        \item \textbf{singolo}: l'ambiente permette di addestrare più modelli ma questi vengono valutati singolarmente.
+        \item \textbf{discreto}: è fornito un insieme discreto di informazioni per ciascun libro.
+        \item \textbf{singolo}: l'ambiente permette di addestrare più modelli valutati singolarmente.
     \end{itemize}
     \hline
     \rowcolor{lightblue}
@@ -105,7 +105,7 @@
     \item grafici esplicativi: mostrano informazioni di vario tipo, tra cui analisi del dataset e risultati ottenuti dalle predizioni dei modelli.\end{itemize}
     \hline
     \rowcolor{lightsteelblue}
-    \textbf{Sensors} & I modelli ricevono le informazioni necessarie per l'addestramento tramite un file contenente il dataset. Inoltre è possibile specificare tramite console nuovi dati su cui effetturare nuove predizioni. \\
+    \textbf{Sensors} & I modelli ricevono le informazioni necessarie per l'addestramento tramite un file in formato csv contenente il dataset. Inoltre, è possibile specificare, grazie all'utilizzo della console, nuovi dati su cui effetturare nuove predizioni. \\
     \hline
     \caption{Tabella della specifica PEAS}
     \end{longtable}
@@ -125,23 +125,81 @@
     \begin{enumerate}
     \subsection{Data cleaning}
     \begin{justify}
-    Il Data Cleaning è la fase durante la quale ci si occupa di "pulire" il dataset mantenendo solo i dati più completi e chiari. Da una prima osservazione dei dati è stata rilevata la presenza di due aspetti che possono ostacolare la corretta esecuzione dei metodi di classificazione e degli algoritmi di clustering che saranno implementati successivamente. Le operazioni svolte sui dati sono state svolte tramite la funzione "clearData". La prima correzione effettuata è stata l'eliminazione dei campi nulli presenti in alcune righe in modo da ottenere un dataset completo senza dati mancanti. Successivamente è stata eseguita l'eliminazione delle righe duplicate e di quelle non significative poiché non contribuiscono a migliorare la Classificazione e il Clustering. Per decidere quali sono le frasi non significative è stato utilizzato il parametro "des\textunderscore{}threshold" che indica un limite. Se le frasi contengono un numero di caratteri inferiore a "des\textunderscore{}treshold" allora verranno considerate non significative. La funzione "clearData" applica la prima e la seconda operazione sui dati delle features: Descrizioni e autori, mentre la terza operazione verrà eseguita solo sulla feature delle descrizioni poiché applicarla agli autori risulta inutile e controproducente. 
+    Nella fase di Data Cleaning ci si occupa di "pulire" il dataset mantenendo solo i dati utili all'addestramento del modello. Da una prima osservazione dei dati è stata rilevata la presenza di due aspetti che possono ostacolare la corretta esecuzione degli algoritmi di classificazione e di clustering, che saranno implementati successivamente. La funzione "clearData" si occupa della pulizia dei dati, con le seguenti operazioni: 
+    \begin{enumerate}[label=\arabic*)]
+        \item eliminazione dei campi nulli. In tal modo si è ottenuto un dataset senza dati mancanti.
+        \item eliminazione delle righe duplicate.
+        \item eliminazione delle righe non significative. Per identificare le frasi non significative è stato utilizzato il parametro "des\textunderscore{}threshold" che indica un limite. Se le frasi contengono un numero di caratteri inferiore a "des\textunderscore{}treshold" allora verranno considerate non significative.
+    \end{enumerate}
+    La funzione "clearData" applica la prima e la seconda operazione su tutti i dati presenti all'interno del dataset. Mentre la terza operazione verrà eseguita solo sulla feature delle descrizioni, in quanto applicarla agli autori potrebbe risultare controproducente. 
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/cleanData.png}
+    
     \newpage
     \begin{justify}
-    Lavorare su dati testuali significa lavorare sul Natural Language. Quest'aspetto implica una sequenza di azioni di normalizzazione da applicare sulle descrizioni dei libri e sugli autori. Le funzioni "preprocessAuthors" e "preprocessDescription" si occupano di svolgere queste azioni.
+    Dopo una successiva analisi del dataset e delle categorie presenti al suo interno, si è notata la presenza di alcune categorie similari. Per assicurarci una predizione ottimale del genere è necessario identificare le categorie nella loro unicità. A tale scopo viene utilizzata la funzione "renameCategories". Essa si occupa di rinominare le categorie utilizzando una lista di rinominazioni.
     \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/renameCategories.png}
+
+    \begin{minipage}[t]{0.39\textwidth}
+    \vspace{30pt}
+    Di lato è mostrata la lista passata alla funzione "renameCategories":
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.50\textwidth}
+    \vspace{20pt}
+    \includegraphics[width=1\textwidth]{pics/rinominoCategorie.png}
+    \end{minipage}
+    
     \begin{justify}
-    La funzione "preprocessAuthors" esegue tre operazioni: i caratteri verrano resi tutti minuscoli in modo da rendere i dati testuali più uniformi e leggibili, verrà eliminata la punteggiatura per eliminare il rumore e l'ultima è l'eliminazione delle stop words. Tramite l'utilizzo delle librerie NLTK sono state individuate le stop words e sono state successivamente aggiunte ai file "authors\textunderscore{}stopwords.txt" e "description\textunderscore{}stopwords.txt" in modo da distinguere le stop words all'interno delle features "autori" e "descrizioni". 
+    Sono state selezionate sedici categorie differenti. Tale selezione è stata effettuata prendendo in considerazione la frequenza della ricorrenza di ciascuna categoria. Questo ha portato all' eliminazione di categorie aventi troppi pochi dati per permettere ai modelli di ottenere un buon riconoscimento della categoria stessa. Tale operazione viene effettuata tramite la funzione "extractCategories".
     \end{justify}
-    \includegraphics[width=0.95\textwidth]{pics/preprocessAuthors.png}
+
+    \begin{justify}
+    La seguente funzione si occupa di estrarre le categorie di interesse in modo da poter eliminare tutte quelle righe non appartenenti ad esse. 
+    Per ogni riga vengono svolte le seguenti azioni:
+    \begin{itemize}
+        \item estrarre tutte le categorie separate da ',';
+        \item se nessuna delle categorie estratte appartiene a 'toExtract', allora la riga viene eliminata;
+        \item tra le categorie che fanno parte di 'toExtact', viene assegnato al campo "Category" quella che ha meno esempi nel dataframe.
+    \end{itemize}
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/extractCategories.png}
+
+    \begin{justify}
+    Di seguito sono mostrate le categorie estratte: 
+    \end{justify}
+    \includegraphics[width=0.95\textwidth]{pics/listaCategories.png}
+
+    \begin{justify}
+    Lavorare su dati testuali significa lavorare sul Natural Language. Quest'aspetto implica una sequenza di azioni di normalizzazione da applicare sulle descrizioni e sugli autori. Ma prima di normalizzare i dati risulta più efficiente eseguire un'operazione di bilanciamento del dataset (vedere paragrafo ~\ref{bil}) nel quale vengono eliminate le righe di quelle categorie troppo frequenti.
+    Le operazioni di normalizzazione sono svolte dalle funzioni "preprocessAuthors" e "preprocessDescription". Queste funzioni utizzano le stop words che vengono identificate prima della loro esecuzione. Tramite l'utilizzo delle librerie NLTK sono state individuate le stop words e sono state successivamente aggiunte ai file "authors\textunderscore{}stopwords.txt" e "description\textunderscore{}stopwords.txt" in modo da distinguere le stop words all'interno delle features "autori" e "descrizioni". 
+    \end{justify}
     \newpage
     \begin{justify}
-    La funzione "preprocessDescrition" eseguirà le stesse operazioni svolte da "preprocessAuthors" occupandosi, però, di svolgere anche la lemmatizzazione. La lemmatizzazione è una tecnica che permette la riduzione delle parole nella loro forma radice considerando sia la grammatica che il significato (esempio: playing in play). 
+    \hypertarget{preD}{
+    La funzione "preprocessDescrition" esegue le seguenti operazioni:
+    \begin{itemize}
+        \item i caratteri vengono resi tutti minuscoli in modo da rendere i dati testuali più uniformi e leggibili;
+        \item eliminazione della punteggiatura per eliminare il rumore;
+        \item eliminazione delle stop words;
+        \item lemmatizzazione, una tecnica che permette la riduzione delle parole nella loro forma radice considerando sia la grammatica che il significato (esempio: playing in play).
+    \end{itemize}
+    }
     \end{justify}
     \includegraphics[width=0.95\textwidth]{pics/preprocessDescription.png}
+    \newpage
     \begin{justify}
+    \hypertarget{preA}{
+    La funzione "preprocessAuthors" eseguirà le stesse prime tre operazioni di "preprocessDescription".
+    }
+    \end{justify}
+    
+    \includegraphics[width=0.95\textwidth]{pics/preprocessAuthors.png}
+    \begin{justify}
+    Per illustrare la corretta esecuzione delle due funzioni mostrate precedentemente vengono utilizzate le WordCloud (vedere cap). Queste vengono utilizzate per osservare facilmente come i dati testuali siano cambiati e resi più semplci e funzionali.
     In conclusione, dopo la fase di Data Cleaning, avremmo un database completo e leggibile che garantisca sia la qualità che la quantità dei dati. 
     \end{justify}
     \end{enumerate}
@@ -154,8 +212,9 @@
     \end{justify}
     \end{enumerate}
 
+    \newpage
     \begin{enumerate}
-    \subsection{Bilanciamento dataset}
+    \subsection{Bilanciamento dataset}\label{bil}
     \begin{justify}
     %sistema l'ordine
     Da una prima osservazione del grafico, che mostra i libri divisi nei 20 generi, si può notare lo sbilanciamento del dataset. 
@@ -176,9 +235,9 @@
     \end{figure}
     
     \begin{justify}
-    Come è possibile notare dalla 'Figure 2' il dataset non risulta completamente bilanciato. Questo risultato è dovuto alla natura stessa del dataset. Per ottenere un dataset bilanciato si sarebbero dovute eliminare molte informazioni, non avendo così più a disposizione abbastanza dati per addestrare i nostri modelli.\\
+    Come si nota dalla 'Figure 2' il dataset non risulta completamente bilanciato. Questo risultato è dovuto alla natura stessa del dataset. Per ottenere un dataset bilanciato si sarebbero dovute eliminare molte informazioni, non avendo così più a disposizione abbastanza dati per addestrare i nostri modelli.\\
     \end{justify}
-    \hfill
+    
     \begin{justify}
     Il bilanciamento del dataset è stato effettuato tramite la funzione "balanceCategories", la quale verifica il numero di righe per ogni categoria ed elimina casualmente delle righe di categorie con più di 'threshold' esempi.
     \end{justify}
@@ -218,9 +277,8 @@
 
     %\hfill
     \begin{justify}
-    Tale illustrazione ci permette di analizzare con più semplicità le parole ricorrenti ed individuare delle stop words aggiuntive, che fanno riferimento al dataset in questione, come ad esempio "book" e "life". Allo stesso ragionamento vengono sottoposti gli autori.Per le stop words aggiuntive inerenti alla descrizione e agli autori sono stati creati due nuovi file di testo, chiamati rispettivamente "description\textunderscore{}stopwords.txt" e "authors\textunderscore{}stopwords.txt". Ecco le stop word individuate:
+    Tale illustrazione ci permette di analizzare con più semplicità le parole ricorrenti ed individuare delle stop words aggiuntive, che fanno riferimento al dataset in questione, come ad esempio "book" e "life". Allo stesso ragionamento vengono sottoposti gli autori. Per le stop words aggiuntive, inerenti alla descrizione e agli autori, sono stati creati due nuovi file di testo, chiamati rispettivamente "description\textunderscore{}stopwords.txt" e "authors\textunderscore{}stopwords.txt". Ecco le stop word individuate:
     \end{justify}
-    %\includegraphics[width=0.10\textwidth]{pics/aggiuntaStopWordsDescription.png}
     
     \begin{figure}[H]
     \begin{subfigure}{0.15\textwidth}
@@ -243,7 +301,7 @@
 
     \newpage
     \begin{justify}
-    Con la successiva eliminazione delle stop words individuate, si ottiene il seguente word cloud:
+    L'eliminazione delle stop words avviene tramite le funzioni \hyperlink{preD}{"preprocessDescription"}, per le descrizioni, e \hyperlink{preA}{"preprocessAuthors"}, per gli autori. Si ottiene il seguente word cloud riguardanti le descrizioni:
     \end{justify}
     \begin{figure}[H]
     \centering

@@ -152,7 +152,7 @@ models = {}
 print("Addestramento dei modelli di clustering")
 for model_name in model_names:
     print(f"\nAddestramento del modello {model_name}...")
-    model, fitTime = trainClusters(df[["Description","Authors"]],model_name)
+    model, fitTime = trainClusters(df[["Description","Authors"]], model_name,saveEstimator=model_name)
     print(f"Addestramento concluso in {round(fitTime, 2)} secondi")
     print("\nAnalisi del modello...\n")
 

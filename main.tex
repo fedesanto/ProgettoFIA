@@ -337,102 +337,166 @@
 
 
 \section{Classificazione}
-
-    \begin{enumerate}
-    \subsection{Linear Support Vector Classification  }
-    \end{enumerate}
+    \begin{justify}
+        La classificazione fa uso di tecniche di apprendimento supervisionato al fine di predire la variabile target (Categoria) sulla base delle variabili indipendenti (Descrizione, Autori). Esistono svariati modelli di classificazione che operano sotto condizioni ed ipotesi differenti: alcuni di questi sono più adatti per dataset sbilanciati, altri ancora per lavorare con matrici sparse (come quella ottenuta dall’elaborazione dei testi tramite TF-IDF), ecc. Nel nostro contesto, la classificazione basata su linguaggio naturale presenta molte problematiche, per cui non è possibile identificare un modello adatto a risolverle tutte. A tal proposito, differenti modelli di classificazione sono stati addestrati e valutati, avendo cura di utilizzare per tutti essi gli stessi dati per l’addestramento e il testing, per garantire un confronto equo. 
+        Per ciascuno di essi sono state calcolate e riportate le seguenti metriche:
+        \begin{itemize}
+            \item Accuracy
+            \item Tempo necessario per l’addestramento
+            \item Classification report indicante precisione, recall e f1-score per ciascuna classe predetta
+            \item Matrice di confusione delle predizioni effettuate
+        \end{itemize}
+    \end{justify}
    
     \begin{enumerate}
-    \subsection{Mulinomial Classification}
+    \subsection{Mulinomial Naive Bayes Classification}
+    \begin{justify}
+        Il classificatore Multinomial Naive Bayes è una tipologia di classificatore probabilistico bayesiano che lavora secondo l’assunzione per cui le caratteristiche predittive siano distribuite secondo una distribuzione multinomiale. Risulta particolarmente adatto nei contesti in cui le caratteristiche degli elementi da predire rappresentano conteggi di occorrenze, tuttavia, nel pratico, anche conteggi frazionari dovrebbero funzionare sufficientemente bene.
+        Il suo addestramento ha impiegato all’incirca 5.14 secondi, ottenendo un punteggio di accuracy di 0.715. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
+        *immagine (classificationReportMultinomialNB.png)*
+        *immagine (MultinomialNBconfusionmatrix.png)*
+        Tra tutti i classificatori provati, questo è risultato essere quello più rapido durante l’apprendimento, a discapito, tuttavia, di un punteggio di accuracy e, in generale, di risultati nettamente inferiori rispetto agli altri. Si può notare, infatti, come il modello faccia confusione su diverse categorie, non riuscendo a distinguerle dalle altre (si vedano le predizioni fatte per “Animals” e “Art”). Si noti come le categorie su cui presenta più difficoltà sono di fatto quelle con minor numero di esempi all’interno del dataset, rispecchiando quindi quelle che sono le problematiche principali di un qualsiasi classificatore bayesiano.
+    \end{justify}
     \end{enumerate}
     
      \begin{enumerate}
     \subsection{Complement Naive Bayes Classification}
+    \begin{justify}
+        Il classificatore Complement Naive Bayes è una variante del classificatore bayesiano multinomiale, progettato per affrontare situazioni in cui le classi del problema in esame sono particolarmente sbilanciate. Nonostante i risultati mediocri riportati dal precedente classificatore, si è comunque deciso di provate un ulteriore classificatore bayesiano per verificare se l’approccio adottato dal Complement sia effettivamente maggiormente adatto a dataset sbilanciati rispetto al Multinomial
+    Il suo addestramento ha impiegato all’incirca 5.75 secondi, ottenendo un punteggio di accuracy di 0.818. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
+    *immagine (classificationReportComplementNB.png)*
+    *immagine (ComplementNBconfusionmatrix.png)*
+    Si notano fin da subito risultati nettamente migliori rispetto al classificatore multinomiale, con un tempo di addestramento che, seppur leggermente superiore, comunque paragonabile rispetto al precedente. Osservando la matrice di confusione, come ci si può aspettare da un classificatore bayesiano, si osservano ancora delle lacune nelle predizioni delle classi con meno esempi. Nonostante ciò, è evidente che l’approccio adottato dal classificatore Complement, per dataset sbilanciati, ha permesso al modello di adattarsi meglio ai dati disponibili, e, seppur non ottimo per un problema di classificazione di testi, è comunque un modello valido e consigliabile in altri contesti.
+    \end{justify}
     \end{enumerate}
     
     \begin{enumerate}
-    \subsection{Logistic Classification}
+    \subsection{Liner Support Vector Classification}
+    \begin{justify}
+        Il classificatore Linear Support Vector è una tipologia di classificatore lineare binario. Il suo funzionamento è basato sulla rappresentazione degli esempi da predire come punti in uno spazio multidimensionale ed ha l’obiettivo di identificare il piano che meglio separa tali esempi in due categorie ben distinte. Essendo un classificatore binario, normalmente è in grado di classificatore solo due categorie, tuttavia grazie all’integrazione della tecnica One-Vs-Rest è in grado di risolvere anche problemi multiclasse. 
+        Secondo la documentazione riportata da Sklearn per il modello LinearSVC, è un tipo di modello adatto ad input sotto forma di matrici sparse e per tal motivo è stato sottoposto alle nostre valutazioni, con l’obiettivo, inoltre, di osservare quanto un modello basato su un approccio lineare (dunque totalmente differente dagli approcci precedenti) potesse adattarsi bene ad un problema di classificazione di testi.
+        Il suo addestramento ha impiegato all’incirca 7.36 secondi, ottenendo un punteggio di accuracy di 0.854. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
+        *immagine (classificationReportLinearSVC.png)*
+        *immagine (LinearSVCconfusionmatrix.png)*
+        Si evidenziano immediatamente risultati decisamente migliori rispetto ai modelli precedenti. Il tempo per l’apprendimento è ancora sufficientemente basso e le predizioni sono state molto più accurate e con meno lacune rispetto le categorie meno frequenti. Dal classification report si nota come la categoria “Art” sia quella con lo score minore (f1-score di 0.74), come ci si poteva aspettare dalla classe con meno esempi nel dataset, ma tutto sommato le predizioni effettuate sono abbastanza soddisfacenti. Dalla matrice di confusione è ora possibile notare una tendenza, più evidente rispetto ai modelli precedenti, nel confondere alcune categorie simili. Di fatto un buon numero di libri appartenenti alla categoria “Mistery & Detective” sono stati confusi come “Thriller” (lo stesso vale per il contrario). Osservando i wordcloud delle categorie in questione, sono differenti le parole chiave comuni (Es. “murder”, “killer”): è dunque evidente la difficoltà nella suddivisione netta delle due tipologie di libri ed è una tendenza che ci si aspetta di osservare anche dai successivi classificatori.
+    \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
+    \subsection{Logistic Regression Classification}
+    \beging{justify}
+    Il classificatore Logistico, anche detto Regressore Logistico, è una tipologia di classificatore lineare binario. Il suo obiettivo è l’identificazione di una retta (o un piano, nel caso in cui le feature fossero superiori a due) in grado di stimare la probabilità che un esempio faccia parte di una determinata classe piuttosto che un’altra. Dalla probabilità stimata è poi facile ricondurre la categoria da predire, passando dunque da un problema risolto con un approccio regressivo, ad uno di classificazione. 
+    Anche tale algoritmo supporta l’integrazione della tecnica One-Vs-Rest per effettuare predizioni multiclasse e risulta essere adatto ad input sotto forma di matrici sparse. Considerando i risultati ottenuti dal classificatore precedente, si è decisi di valutare un ulteriore classificatore lineare, con una tipologia di approccio misto regressione – classificazione.
+    Il suo addestramento ha impiegato all’incirca 114.64 secondi, ottenendo un punteggio di accuracy di 0.842. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
+    *immagine (classificationReportLogisticRegression.png)*
+    *immagine (LogisticRegressionconfusionmatrix.png)*
+    Tra tutti i classificatori provati, questo è stato il classificatore più lento durante l’addestramento. Com’è noto, gli algoritmi di apprendimento per problemi di regressione lineare impiegano molto tempo per apprendere le funzioni lineari che meglio si adattano ai dati, special modo se si lavora con dati in larga scala in termini di numero di righe e numero di feature, e durante i vari test condotti sul regressore logistico sono state diverse le volte in cui l’algoritmo non è stato in grado di convergere ad una soluzione, riportando dunque un errore. Indipendentemente da ciò, i risultati ottenuti sono di poco al di sotto del classificatore precedente e, in generale, abbastanza soddisfacenti. Si può notare una maggior confusione, rispetto al Linear Support Vector, verso ulteriori categorie simili, come per “Religion” - “History” e “Fantasy” - “Romance”, e tutti i punteggi f1-score riportati per le varie categorie risultano essere più bassi. 
+    \end{justify}
+    \end{enumerate}
+
+   \begin{enumerate}
     \subsection{Stochastic Gradient Descent Classification}
+    \begin{justify}
+    Il classificatore Stochastic Gradient Descent non fa parte di una specifica famiglia di modelli di machine learning ma è piuttosto una tecnica di ottimizzazione che permette di addestrare un modello di classificazione in maniera efficiente. Secondo la documentazione fornita da Sklearn, a seconda della configurazione degli iperparametri che gli vengono forniti, utilizza specifiche tecniche adottate già da altri modelli, tuttavia con l’obiettivo di ottimizzarle. Teli tecniche si basano su approcci lineari e, visti gli ottimi risultati ottenuti dai precedenti classificatori lineari, sembra ragionevole considerare anche quest’ulteriore classificatore. Inoltre, è un modello adatto per apprendimenti su dati in larga scala, sia in termini di numeri di esempi che di feature per ciascuno di essi, e per questo dovrebbe risultare ottimo nei problemi di classificazione di testo e, in generale, nel natural language process.
+    Il suo addestramento ha impiegato all’incirca 7.23 secondi, ottenendo un punteggio di accuracy di 0.85. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
+    *immagine (classificationReportSGDClassifier.png)*
+    *immagine (SGDClassifierconfusionmatrix.png)*
+    I risultati ottenuti da tale modello sono molto simili a quelli ricavati dal Linear Support Vector. Tempi di addestramento e punteggi sono del tutto analoghi e si è potuto notare, durante i vari test condotti sui modelli, come in effetti nessuno dei due modelli prevalga in assoluto sull’altro: per alcuni testi il Linear Support Vector è risultato migliore, per altri, invece, lo è stato SGD. Tale modello rappresenta un’ulteriore prova di come gli approcci lineari risultino ottimi per problemi di classificazione di testo.
+    \end{justify}
     \end{enumerate}
-
-   
     
     \begin{enumerate}
-    \subsection{Valutazione della Classificazione}
+    \subsection{Valutazioni finali sulla Classificazione}
+    \begin{justify}
+    Dai risultati ottenuti si evidenzia come i classificatori bayesiani sono del tutto sconsigliabili per problemi di classificazione testuale: seppur abbastanza rapidi nella fase di addestramento, non sembrano adattarsi bene ad uno spazio di esempi con numerose feature e rischiano facilmente di andare in underfitting.
+    Procedendo, la classificazione tramite approccio regressivo adottata dal regressore lineare sembra essere sufficientemente adeguata a fornire buoni risultati, tuttavia, la sua scarsa scalabilità a dati di grandi dimensioni lo rendono un algoritmo poco efficiente e facilmente impraticabile. Difatti, nel nostro caso sono stati utilizzati all’incirca 27000 esempi per l’addestramento ma, in casi reali, per produrre una soluzione di machine learning sufficientemente addestrata, tale numero dovrebbe essere molto più grande, il che renderebbe estremamente complesso, per un modello di regressione lineare, arrivare a convergenza.
+    Infine, i modelli lineari (Linear Support Vector e SGD) sono risultati assolutamente i migliori: non solo i punteggi ottenuti sono di gran lunga superiori agli altri tipi di modelli ma anche i tempi di addestramento, seppur non i più bassi, sono stati sufficientemente contenuti. Inoltre, sono stati in grado di adattarsi ottimamente ad un dataset piuttosto sbilanciato e fornire predizioni abbastanza accurate per ogni categoria. Per quanto riguarda la scalabilità verso un quantitativo da dati maggiore, dalle documentazioni riportate dalla libreria Sklearn,  l’algoritmo SGD dovrebbe essere progettato e ottimizzato appositamente per lavorare con grandi mole di dati e, per tal motivo, è preferibile rispetto al Linear Support Vector.
+    Si tenga presente che tutti i modelli hanno avuto chiare difficoltà nel distinguere accuratamente categorie con elementi simili, come per “Mystery & Detective” – “Thriller” o “Religion” – “History”. Osservando i relativi wordcloud ci si accorge facilmente di parole chiave comuni che potrebbero indurre in confusioni. Al fine di rendere più netta la divisione tra le categorie, e dunque ottenere dai modelli risultati migliori, si potrebbe pensare di accorpare categorie con elementi simili, com’è già stato fatto per altre categorie precedentemente presenti nel dataset. Tuttavia, si rischierebbe di avere un set di categorie predicibili eccessivamente generiche e, dunque, poco utili nella maggior parte dei contesti pratici.
+    \end{justify}
     \end{enumerate}
 
 
 \section{Clustering}
     \begin{justify}
-        Nel contesto dell'analisi e dell'organizzazione di un vasto insieme di libri provenienti da un dataset contenente descrizioni e informazioni sugli autori, il Clustering, basato sulle regole dell'apprendimento non supervisionato, si presenta, in linea teorica, come un buon approccio alternativo alla classificazione. Questa metodologia ci offre la possibilità di organizzare i libri in gruppi sfruttando contemporaneamente le somiglianze semantiche nelle descrizioni e le ricorrenze degli autori per ogni cluster in modo da creare connessioni significative tra opere affini. Conoscendo a priori il numero di categorie differenti presenti nel dataset (16), si è adottato un approccio che coinvolge algoritmi di Clustering in cui il numero di gruppi risultanti al termine sia preimpostato come iperparametro. Di conseguenza, questa scelta ci ha permesso di effettuare anche un confronto più accurato con gli algoritmi di Classificazione. I modelli selezionati e addestrati sul dataset sono stati: K-Means, Mini-Batch KMeans e Spectral Clustering.
+        Nel contesto dell'analisi e dell'organizzazione di un vasto insieme di libri provenienti da un dataset contenente descrizioni e informazioni sugli autori, il clustering, basato sulle regole dell'apprendimento non supervisionato, si presenta, in linea teorica, come un buon approccio alternativo alla classificazione. Questa metodologia ci offre la possibilità di organizzare i libri in gruppi, sfruttando contemporaneamente le somiglianze semantiche nelle descrizioni e le ricorrenze degli autori per ogni cluster, così da creare connessioni significative tra opere affini. Conoscendo a priori il numero di categorie differenti presenti nel dataset (16), si è adottato un approccio che coinvolge algoritmi di clustering in cui, il numero di gruppi risultanti al termine sia preimpostato come iperparametro. Questa scelta ci ha permesso, di conseguenza, di effettuare anche un confronto più accurato con gli algoritmi di classificazione.
+        Per ogni modello selezionato sono state calcolate e riportare le seguenti metriche:
+        \begin{itemize}
+            \item Silhouette score
+            \item Tempo necessario per l’addestramento
+            \item Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster (vedi immagine sotto)
+            \item Top 10 autori più frequenti contenuti negli elementi di ogni cluster (vedi immagine sotto)
+        \end{itemize}
+        *immagine keywords.png*
     \end{justify}
     \begin{enumerate}
     \subsection{Algoritmo K-Means}
     \begin{justify}
-        L'algoritmo K-Means raggruppa i dati cercando di separare i campioni in K gruppi di uguale varianza minimizzando un criterio, noto come “somma dei quadrati”, all'interno del cluster. Possiamo descrivere questo procedimento con i seguenti step:
+        Il K-Means è uno degli algoritmi di clustering più famoso, il suo obiettivo è quello di raggruppare i dati cercando di separare i campioni in K gruppi di uguale varianza, minimizzando un criterio noto come “somma dei quadrati” all'interno del cluster. Possiamo descrivere questo procedimento con i seguenti step:
         \begin{enumerate}[label=\arabic*)]
-            \item Scegliere in modo casuale K punti nel dataset come centroidi iniziali;
-            \item Generare un partizionamento assegnando ogni campione al centroide più vicino;
-            \item Calcolare i nuovi centroidi del cluster considerando la media dei valori del cluster generato al punto 2;
-            \item Ripetere i passi 2 e 3 fino a quando i centroidi non cambino;
+            \item Scegli in modo casuale K punti nel dataset come centroidi iniziali
+            \item Genera un partizionamento assegnando ogni campione al centroide più vicino
+            \item Calcola i nuovi centroidi del cluster, considerando la media dei valori del cluster generato al punto 2
+            \item Ripeti i passi 2 e 3 fino a quando i centroidi non cambiano
         \end{enumerate}
+        Il suo addestramento ha impiegato all’incirca 17.99 secondi, ottenendo un Silhouette score di 0.006. Di seguito né si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti
+        Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
+        *immagine desckmeans.PNG*
+        Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
+        *immagine autkemans.PNG*
+        Possiamo a questo punto osservare che, avendo ottenuto un Silhouette score molto vicino allo 0 i cluster ricavati al termine sono, in realtà, cluster sovrapposti; infatti, anche andando ad analizzare le keywords ottenute non è molto chiaro per tutti i cluster che genere questi rappresentino. Questi risultati poco incoraggianti ci lasciano come scelta solo quella di analizzare come si comporta un modello di Mini-Batch K-Means in termini di tempo di addestramento (poiché non ci potrà permettere di ottenere risultati migliori) e successivamente affidarci all’abilità di gestire strutture complesse e non lineari nei dati dello Spectral Clustering
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Algoritmo MiniBatchKMeans}
     \begin{justify}
-    L'algoritmo MiniBatchKMeans è una variante dell'algoritmo K-Means standard che utilizza minibatch di campioni. Quest'ultimi sono sottoinsiemi di dati input, campionati casualmente in ogni iterazione di training, utilizzati per aggiornare i centroidi invece di utilizzare l'intero set di dati. Quest'approccio rende Mini-Batch K-Means più efficiente dal punto di vista computazionale permettendo di lavorare su dataset più grandi rispetto al K-Means tradizionale. A differenza di altri algoritmi, che riducono il tempo di convergenza, il Mini-Batch K-Means produce risultati che generalmente sono solo lievemente peggiori rispetto all’algoritmo standard. 
+    Il Mini-Batch K-Means è una variante dell'algoritmo K-Means standard che utilizza minibatch di campioni, ovvero sottoinsiemi di dati di input campionati casualmente in ogni iterazione di training, per aggiornare i centroidi, invece di utilizzare l'intero set di dati. Questo approccio rende Mini-Batch K-Means più efficiente dal punto di vista computazionale, permettendo di lavorare su dataset più grandi rispetto al K-Means tradizionale. A differenza di altri algoritmi che riducono il tempo di convergenza, il Mini-Batch K-Means produce risultati che generalmente sono solo leggermente peggiori rispetto all’algoritmo standard. 
     Possiamo descrivere questo algoritmo con i seguenti step:
+
     \begin{enumerate}[label=\arabic*)]
-        \item Scegliere in modo casuale K punti nel dataset come centroidi iniziali;
-        \item Ad ogni iterazione, seleziona casualmente un minibatch di dimensione prefissata dal dataset;
-        \item Genera un partizionamento assegnando ogni campione del minibatch al centroide più vicino;
-        \item Aggiorna i centroidi usando la media dei punti nel minibatch corrente;
-        \item Vengono ripetuti i passi da 2 a 4 fino a quando i centroidi non cambiano;
+        \item Scegli in modo casuale K punti nel dataset come centroidi iniziali
+        \item Ad ogni iterazione, seleziona casualmente un minibatch di dimensione prefissata dal dataset
+        \item Genera un partizionamento assegnando ogni campione del minibatch al centroide più vicino 
+        \item Aggiorna i centroidi usando la media dei punti nel minibatch corrente
+        \item Ripeti i passi da 2 a 4 fino a quando i centroidi non cambiano
     \end{enumerate}
+    Il suo addestramento ha impiegato all’incirca 3.17 secondi, ottenendo un Silhouette score di 0.005. Di seguito né si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti
+    Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
+    *immagine descminik.PNG*
+    Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
+    *immagine autminik.PNG*
+    È possibile notare come questo modello sia nettamente più rapido nell’addestramento rispetto alla versione standard del K-Means (quasi 15 secondi di differenza), nonostante questo, come già previsto dalla teoria, il Silhouette score non si abbassa drasticamente. Lo scopo di dell’implementazione di questo algoritmo volge più a un fine sperimentale che di utilità; c’è anche però da dire che in una possibile futura analisi su un dataset con le stesse features ma con molti più dati l’algoritmo Mini-Batch K-Means potrebbe quasi del tutto sostituire K-Means e, talvolta, essere preferibile a esso.
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
     \subsection{Algoritmo SpectralClustering}
     \begin{justify}
-    L'algoritmo SpectralClustering si basa sulla teoria spettrale, ovvero una branca matematica legata allo studio delle proprietà degli spettri degli operatori lineari. Quest' approccio offre un modo potente per affrontare strutture complesse e non lineari nei dati, le quali non possono essere gestite adeguatamente da metodi più tradizionali come K-Means. 
+    Lo Spectral Clustering è un algoritmo di clustering che si basa sulla teoria spettrale, ovvero una branca matematica legata allo studio delle proprietà degli spettri degli operatori lineari. Questo approccio offre un modo potente per affrontare strutture complesse e non lineari nei dati, che non possono essere gestite adeguatamente da metodi più tradizionali come K-Means. 
     Il processo di funzionamento può essere suddiviso in diverse fasi:
     \begin{enumerate}[label=\arabic*)]
-        \item Utilizzando la similarità tra i punti del dataset (calcolata ad esempio utilizzando la distanza euclidea tra i punti), viene costruito un grafo;
+        \item Utilizzando la similarità tra i punti del dataset (calcolata ad esempio utilizzando la distanza euclidea tra i punti), viene costruito un grafo. 
         \item Sfruttando la teoria spettrale, il grafo viene trasformato in uno spazio di dimensioni inferiori attraverso la procedura degli autovettori e degli autovalori.
-        \item Una volta ottenuto lo spazio trasformato, viene applicato un algoritmo di Clustering, come ad esempio K-Means, per raggruppare i punti in cluster. 
-        \item I risultati dell'algoritmo di Clustering vengono utilizzati per assegnare ciascun punto del dataset a un cluster specifico. La coerenza e la separazione dei cluster dipendono dalla capacità della trasformazione spettrale di rivelare pattern significativi nei dati.
+        \item Una volta ottenuto lo spazio trasformato, viene applicato un algoritmo di clustering, come ad esempio K-Means, per raggruppare i punti in cluster. 
+        \item I risultati dell'algoritmo di clustering vengono utilizzati per assegnare ciascun punto del dataset a un cluster specifico. La coerenza e la separazione dei cluster dipendono dalla capacità della trasformazione spettrale di rivelare pattern significativi nei dati.
     \end{enumerate}
+    Il suo addestramento ha impiegato all’incirca 273.08 secondi, ottenendo un Silhouette score di 0.005.Di seguito né si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti
+    Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
+    immagine descspect.PNG
+    Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
+    immagine autspect.PNG
+    Tra tutti gli algoritmi di clustering provati, questo è stato decisamente il più lento, anche con un margine piuttosto evidente. Ovviamente c’era da aspettarselo poiché, oltre che eseguire il K-Means, lo Spectral Clustering richiede ulteriori operazioni preliminari di costruzione di un grafo e trasformazione di esso in uno spazio di dimensioni inferiori. Nonostante il tempo molto disteso per l’addestramento, il Silhouette score ottenuto risulta essere addirittura peggiore di quello ricavato dal K-Means (seppur di poco). Questa valutazione ci permette di capire che l’algoritmo non è stato in grado di rivelare dei pattern significativi nei dati, difficoltà, evidentemente, introdotta dai vari problemi previsti nella gestione del linguaggio naturale.
     \end{justify}
     \end{enumerate}
 
-    \begin{enumerate}
-    \subsection{Valutazione del Clustering: Silhouette score}
-    \begin{justify}
-        Una volta ottenuti i gruppi di elementi, si analizza il Silhouette Score con lo scopo di ricavare informazioni sulla coesione degli elementi dei singoli gruppi e sulla separazione tra di essi. Questa metrica di stima presenta un valore compreso nell’intervallo [-1,+1], dove:
-        \begin{itemize}
-            \item $-1$: indica clustering errato;
-    	\item  $0$: indica cluster sovrapposti;
-    	\item $+1$: indica clustering altamente denso;
-        \end{itemize}
-        Dal punto di vista matematico, il Silhouette Score è definito dalla formula:
-        \[
-        S(i) = \frac{b(i) - a(i)}{\max(b(i), a(i)}
-        \]
-        Dove $b(i)$ è la distanza media dal punto $i$ a tutti gli altri punti del cluster più vicino e $a(i)$ è la distanza media dal punto $i$ a tutti gli altri punti dello stesso cluster.
-        Il valore finale sarà poi ottenuto come la media di tutti i singoli coefficienti di Silhouette.
-    \end{justify}
-    \end{enumerate}
-
-     \begin{enumerate}
-     \subsection{Ottimizzazione}
-     \end{enumerate}
 \section{Conclusioni}
-
+    \begin{justify}
+        Il suo addestramento ha impiegato all’incirca 273.08 secondi, ottenendo un Silhouette score di 0.005.Di seguito né si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti
+        Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
+        *immagine descspect.PNG*
+        Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
+        *immagine autspect.PNG*
+        Tra tutti gli algoritmi di clustering provati, questo è stato decisamente il più lento, anche con un margine piuttosto evidente. Ovviamente c’era da aspettarselo poiché, oltre che eseguire il K-Means, lo Spectral Clustering richiede ulteriori operazioni preliminari di costruzione di un grafo e trasformazione di esso in uno spazio di dimensioni inferiori. Nonostante il tempo molto disteso per l’addestramento, il Silhouette score ottenuto risulta essere addirittura peggiore di quello ricavato dal K-Means (seppur di poco). Questa valutazione ci permette di capire che l’algoritmo non è stato in grado di rivelare dei pattern significativi nei dati, difficoltà, evidentemente, introdotta dai vari problemi previsti nella gestione del linguaggio naturale.
+    \end{justify}
     
 \end{document}

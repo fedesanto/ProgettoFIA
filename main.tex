@@ -354,10 +354,10 @@
         Il classificatore Multinomial Naive Bayes è una tipologia di classificatore probabilistico bayesiano che lavora secondo l’assunzione per cui le caratteristiche predittive siano distribuite secondo una distribuzione multinomiale. Risulta particolarmente adatto nei contesti in cui le caratteristiche degli elementi da predire rappresentano conteggi di occorrenze, tuttavia, nel pratico, anche conteggi frazionari dovrebbero funzionare sufficientemente bene.
         Il suo addestramento ha impiegato all’incirca 5.14 secondi, ottenendo un punteggio di accuracy di 0.715. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni:
     \end{justify}
-    \includegraphics[width=0.95\textwidth]{pics/classificationReport_MultinomialNB.png}   
+    \includegraphics[width=0.95\textwidth]{pics/classificationReport_MultinomialNB.png} 
+    \includegraphics[width=0.95\textwidth]{pics/MultinomialNB_confusion_matrix.png}
 
     \begin{justify}
-        *immagine (MultinomialNBconfusionmatrix.png)*
         Tra tutti i classificatori provati, questo è risultato essere quello più rapido durante l’apprendimento, a discapito, tuttavia, di un punteggio di accuracy e, in generale, di risultati nettamente inferiori rispetto agli altri. Si può notare, infatti, come il modello faccia confusione su diverse categorie, non riuscendo a distinguerle dalle altre (si vedano le predizioni fatte per “Animals” e “Art”). Si noti come le categorie su cui presenta più difficoltà sono di fatto quelle con minor numero di esempi all’interno del dataset, rispecchiando quindi quelle che sono le problematiche principali di un qualsiasi classificatore bayesiano.
     \end{justify}
     \end{enumerate}
@@ -366,9 +366,13 @@
     \subsection{Complement Naive Bayes Classification}
     \begin{justify}
         Il classificatore Complement Naive Bayes è una variante del classificatore bayesiano multinomiale, progettato per affrontare situazioni in cui le classi del problema in esame sono particolarmente sbilanciate. Nonostante i risultati mediocri riportati dal precedente classificatore, si è comunque deciso di provate un ulteriore classificatore bayesiano per verificare se l’approccio adottato dal Complement sia effettivamente maggiormente adatto a dataset sbilanciati rispetto al Multinomial
-    Il suo addestramento ha impiegato all’incirca 5.75 secondi, ottenendo un punteggio di accuracy di 0.818. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
-    *immagine (classificationReportComplementNB.png)*
-    *immagine (ComplementNBconfusionmatrix.png)*
+    Il suo addestramento ha impiegato all’incirca 5.75 secondi, ottenendo un punteggio di accuracy di 0.818. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni.
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/classificationReport_ComplementNB.png}
+    \includegraphics[width=0.95\textwidth]{pics/ComplementNB_confusion_matrix.png}
+
+    \begin{justify}
     Si notano fin da subito risultati nettamente migliori rispetto al classificatore multinomiale, con un tempo di addestramento che, seppur leggermente superiore, comunque paragonabile rispetto al precedente. Osservando la matrice di confusione, come ci si può aspettare da un classificatore bayesiano, si osservano ancora delle lacune nelle predizioni delle classi con meno esempi. Nonostante ciò, è evidente che l’approccio adottato dal classificatore Complement, per dataset sbilanciati, ha permesso al modello di adattarsi meglio ai dati disponibili, e, seppur non ottimo per un problema di classificazione di testi, è comunque un modello valido e consigliabile in altri contesti.
     \end{justify}
     \end{enumerate}
@@ -378,21 +382,31 @@
     \begin{justify}
         Il classificatore Linear Support Vector è una tipologia di classificatore lineare binario. Il suo funzionamento è basato sulla rappresentazione degli esempi da predire come punti in uno spazio multidimensionale ed ha l’obiettivo di identificare il piano che meglio separa tali esempi in due categorie ben distinte. Essendo un classificatore binario, normalmente è in grado di classificatore solo due categorie, tuttavia grazie all’integrazione della tecnica One-Vs-Rest è in grado di risolvere anche problemi multiclasse. 
         Secondo la documentazione riportata da Sklearn per il modello LinearSVC, è un tipo di modello adatto ad input sotto forma di matrici sparse e per tal motivo è stato sottoposto alle nostre valutazioni, con l’obiettivo, inoltre, di osservare quanto un modello basato su un approccio lineare (dunque totalmente differente dagli approcci precedenti) potesse adattarsi bene ad un problema di classificazione di testi.
-        Il suo addestramento ha impiegato all’incirca 7.36 secondi, ottenendo un punteggio di accuracy di 0.854. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
-        *immagine (classificationReportLinearSVC.png)*
-        *immagine (LinearSVCconfusionmatrix.png)*
+        Il suo addestramento ha impiegato all’incirca 7.36 secondi, ottenendo un punteggio di accuracy di 0.854. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni.
+        \end{justify}
+
+        \includegraphics[width=0.95\textwidth]{pics/classificationReport_LinearSVC.png}
+        \includegraphics[width=0.95\textwidth]{pics/LinearSVC_confusion_matrix.png}
+
+        
+        \begin{justify}
         Si evidenziano immediatamente risultati decisamente migliori rispetto ai modelli precedenti. Il tempo per l’apprendimento è ancora sufficientemente basso e le predizioni sono state molto più accurate e con meno lacune rispetto le categorie meno frequenti. Dal classification report si nota come la categoria “Art” sia quella con lo score minore (f1-score di 0.74), come ci si poteva aspettare dalla classe con meno esempi nel dataset, ma tutto sommato le predizioni effettuate sono abbastanza soddisfacenti. Dalla matrice di confusione è ora possibile notare una tendenza, più evidente rispetto ai modelli precedenti, nel confondere alcune categorie simili. Di fatto un buon numero di libri appartenenti alla categoria “Mistery Detective” sono stati confusi come “Thriller” (lo stesso vale per il contrario). Osservando i wordcloud delle categorie in questione, sono differenti le parole chiave comuni (Es. “murder”, “killer”): è dunque evidente la difficoltà nella suddivisione netta delle due tipologie di libri ed è una tendenza che ci si aspetta di osservare anche dai successivi classificatori.
     \end{justify}
     \end{enumerate}
 
     \begin{enumerate}
+    
     \subsection{Logistic Regression Classification}
-    \beging{justify}
+    \begin{justify}
     Il classificatore Logistico, anche detto Regressore Logistico, è una tipologia di classificatore lineare binario. Il suo obiettivo è l’identificazione di una retta (o un piano, nel caso in cui le feature fossero superiori a due) in grado di stimare la probabilità che un esempio faccia parte di una determinata classe piuttosto che un’altra. Dalla probabilità stimata è poi facile ricondurre la categoria da predire, passando dunque da un problema risolto con un approccio regressivo, ad uno di classificazione. 
     Anche tale algoritmo supporta l’integrazione della tecnica One-Vs-Rest per effettuare predizioni multiclasse e risulta essere adatto ad input sotto forma di matrici sparse. Considerando i risultati ottenuti dal classificatore precedente, si è decisi di valutare un ulteriore classificatore lineare, con una tipologia di approccio misto regressione – classificazione.
-    Il suo addestramento ha impiegato all’incirca 114.64 secondi, ottenendo un punteggio di accuracy di 0.842. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
-    *immagine (classificationReportLogisticRegression.png)*
-    *immagine (LogisticRegressionconfusionmatrix.png)*
+    Il suo addestramento ha impiegato all’incirca 114.64 secondi, ottenendo un punteggio di accuracy di 0.842. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni.
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/classificationReport_LogisticRegression.png}
+    \includegraphics[width=0.95\textwidth]{pics/LogisticRegression_confusion_matrix.png}
+
+    \begin{justify}
     Tra tutti i classificatori provati, questo è stato il classificatore più lento durante l’addestramento. Com’è noto, gli algoritmi di apprendimento per problemi di regressione lineare impiegano molto tempo per apprendere le funzioni lineari che meglio si adattano ai dati, special modo se si lavora con dati in larga scala in termini di numero di righe e numero di feature, e durante i vari test condotti sul regressore logistico sono state diverse le volte in cui l’algoritmo non è stato in grado di convergere ad una soluzione, riportando dunque un errore. Indipendentemente da ciò, i risultati ottenuti sono di poco al di sotto del classificatore precedente e, in generale, abbastanza soddisfacenti. Si può notare una maggior confusione, rispetto al Linear Support Vector, verso ulteriori categorie simili, come per “Religion” - “History” e “Fantasy” - “Romance”, e tutti i punteggi f1-score riportati per le varie categorie risultano essere più bassi. 
     \end{justify}
     \end{enumerate}
@@ -401,9 +415,13 @@
     \subsection{Stochastic Gradient Descent Classification}
     \begin{justify}
     Il classificatore Stochastic Gradient Descent non fa parte di una specifica famiglia di modelli di machine learning ma è piuttosto una tecnica di ottimizzazione che permette di addestrare un modello di classificazione in maniera efficiente. Secondo la documentazione fornita da Sklearn, a seconda della configurazione degli iperparametri che gli vengono forniti, utilizza specifiche tecniche adottate già da altri modelli, tuttavia con l’obiettivo di ottimizzarle. Teli tecniche si basano su approcci lineari e, visti gli ottimi risultati ottenuti dai precedenti classificatori lineari, sembra ragionevole considerare anche quest’ulteriore classificatore. Inoltre, è un modello adatto per apprendimenti su dati in larga scala, sia in termini di numeri di esempi che di feature per ciascuno di essi, e per questo dovrebbe risultare ottimo nei problemi di classificazione di testo e, in generale, nel natural language process.
-    Il suo addestramento ha impiegato all’incirca 7.23 secondi, ottenendo un punteggio di accuracy di 0.85. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
-    *immagine (classificationReportSGDClassifier.png)*
-    *immagine (SGDClassifierconfusionmatrix.png)*
+    Il suo addestramento ha impiegato all’incirca 7.23 secondi, ottenendo un punteggio di accuracy di 0.85. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni.
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/classificationReport_SGDClassifier.png}
+    \includegraphics[width=0.95\textwidth]{pics/SGDClassifier_confusion_matrix.png}
+
+    \begin{justify}
     I risultati ottenuti da tale modello sono molto simili a quelli ricavati dal Linear Support Vector. Tempi di addestramento e punteggi sono del tutto analoghi e si è potuto notare, durante i vari test condotti sui modelli, come in effetti nessuno dei due modelli prevalga in assoluto sull’altro: per alcuni testi il Linear Support Vector è risultato migliore, per altri, invece, lo è stato SGD. Tale modello rappresenta un’ulteriore prova di come gli approcci lineari risultino ottimi per problemi di classificazione di testo.
     \end{justify}
     \end{enumerate}
@@ -429,7 +447,8 @@
             \item Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster (vedi immagine sotto)
             \item Top 10 autori più frequenti contenuti negli elementi di ogni cluster (vedi immagine sotto)
         \end{itemize}
-        *immagine keywords.png*
+
+        \includegraphics[width=\textwidth]{pics/keywords.PNG}
     \end{justify}
     \begin{enumerate}
     \subsection{Algoritmo K-Means}
@@ -443,9 +462,17 @@
         \end{enumerate}
         Il suo addestramento ha impiegato all’incirca 17.99 secondi, ottenendo un Silhouette score di 0.006. Di seguito né si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti
         Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
-        *immagine desckmeans.PNG*
+        \end{justify}
+
+        \includegraphics[width=0.95\textwidth]{pics/desc_kmeans.PNG}
+        
+        \begin{justify}
         Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
-        *immagine autkemans.PNG*
+        \end{justify}
+
+        \includegraphics[width=0.95\textwidth]{pics/aut_kemans.PNG}
+        
+        \begin{justify}
         Possiamo a questo punto osservare che, avendo ottenuto un Silhouette score molto vicino allo 0 i cluster ricavati al termine sono, in realtà, cluster sovrapposti; infatti, anche andando ad analizzare le keywords ottenute non è molto chiaro per tutti i cluster che genere questi rappresentino. Questi risultati poco incoraggianti ci lasciano come scelta solo quella di analizzare come si comporta un modello di Mini-Batch K-Means in termini di tempo di addestramento (poiché non ci potrà permettere di ottenere risultati migliori) e successivamente affidarci all’abilità di gestire strutture complesse e non lineari nei dati dello Spectral Clustering
     \end{justify}
     \end{enumerate}
@@ -465,9 +492,17 @@
     \end{enumerate}
     Il suo addestramento ha impiegato all’incirca 3.17 secondi, ottenendo un Silhouette score di 0.005. Di seguito né si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti
     Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
-    *immagine descminik.PNG*
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/desc_minik.PNG}
+    
+    \begin{justify}
     Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
-    *immagine autminik.PNG*
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/aut_minik.PNG}
+    
+    \begin{justify}
     È possibile notare come questo modello sia nettamente più rapido nell’addestramento rispetto alla versione standard del K-Means (quasi 15 secondi di differenza), nonostante questo, come già previsto dalla teoria, il Silhouette score non si abbassa drasticamente. Lo scopo di dell’implementazione di questo algoritmo volge più a un fine sperimentale che di utilità; c’è anche però da dire che in una possibile futura analisi su un dataset con le stesse features ma con molti più dati l’algoritmo Mini-Batch K-Means potrebbe quasi del tutto sostituire K-Means e, talvolta, essere preferibile a esso.
     \end{justify}
     \end{enumerate}
@@ -485,9 +520,17 @@
     \end{enumerate}
     Il suo addestramento ha impiegato all’incirca 273.08 secondi, ottenendo un Silhouette score di 0.005.Di seguito né si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti
     Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
-    immagine descspect.PNG
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/desc_spect.PNG}
+    
+    \begin{justify}
     Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
-    immagine autspect.PNG
+    \end{justify}
+
+    \includegraphics[width=0.95\textwidth]{pics/aut_spect.PNG}
+    
+    \begin{justify}
     Tra tutti gli algoritmi di clustering provati, questo è stato decisamente il più lento, anche con un margine piuttosto evidente. Ovviamente c’era da aspettarselo poiché, oltre che eseguire il K-Means, lo Spectral Clustering richiede ulteriori operazioni preliminari di costruzione di un grafo e trasformazione di esso in uno spazio di dimensioni inferiori. Nonostante il tempo molto disteso per l’addestramento, il Silhouette score ottenuto risulta essere addirittura peggiore di quello ricavato dal K-Means (seppur di poco). Questa valutazione ci permette di capire che l’algoritmo non è stato in grado di rivelare dei pattern significativi nei dati, difficoltà, evidentemente, introdotta dai vari problemi previsti nella gestione del linguaggio naturale.
     \end{justify}
     \end{enumerate}
@@ -505,33 +548,69 @@
 \section{Implementazione script per l'addestramento}
     \begin{justify}
         Com’è già stato specificato precedentemente, al fine di poter addestrare un modello di machine learnig su dati testuali è stato necessario far ricorso a conteggi in frequenze per convertire le parole in sequenze di valori numerici utilizzabili da algoritmi di apprendimento. Per far ciò è stato necessario ricorrere alla classe ‘TfidfVectorizer’, la quale è autonomamente in grado di estrarre i token costituenti i periodi testuali, contarli e normalizzare i conteggi secondo la tecnica tf-idf (term frequency–inverse document frequency). L’output fornito  da tale processo è una matrice sparsa di valori numerici, costituita da tante colonne quante sono le differenti parole identificate e tante righe quanti sono gli esempi. Per le descrizioni si è deciso di considerare unicamente token costituiti da parole singole, mentre, per gli autori, si è pensato potesse tornare utile considerare anche token costituiti da due parole (quelle che dovrebbero rappresentare nome e cognome dell’autore).
-        *immagine (tfidtransformer.png) *
+        \end{justify}
+
+        \includegraphics[width=1\textwidth]{pics/tfidtransformer.png}
+        
+        \begin{justify}
         Successivamente, lo script costruisce una pipeline contenente i “vettorizzatori” (istanze di TfidfVectorizer’) per le descrizioni e per gli autori e il modello il cui nome viene specificato da uno dei parametri in input.
-        *immagine (pipeline.png) -> Didascalia: pipeline dei classificatori*
-        *immagine (pipeline2.png) -> Didascalia: pipeline dei clusterer *
-        In seguito, si passa all’addestramento del modello. Se specificato da uno dei parametri in input, si effettua una ricerca dei migliori parametri di configurazione per il modello (vedi paragrafo *numero del paragrafo di ottimizzazione*), portando ad un addestramento molto più lungo, altrimenti si addestra il modello con una configurazione di default. Infine, se specificato, il modello viene serializzato e memorizzato in un file binario per poter essere successivamente recuperato e utilizzato per effettuare predizioni
-        *immagine (addestramento.png)*
-        *immagine (addestramento2.png)*
+        \end{justify}
+
+        \begin{figure}[H]
+        \includegraphics[width=1\textwidth]{pics/pipeline.png}
+        \caption{Pipeline dei classificatori}
+        \end{figure}
+
+        \begin{figure}[H]
+        \includegraphics[width=1\textwidth]{pics/pipeline2.png}
+        \caption{Pipeline dei cluster}
+        \end{figure}
+        
+        \begin{justify}
+        In seguito, si passa all’addestramento del modello. Se specificato da uno dei parametri in input, si effettua una ricerca dei migliori parametri di configurazione per il modello (vedere paragrafo ~\ref{ott}), portando ad un addestramento molto più lungo, altrimenti si addestra il modello con una configurazione di default. Infine, se specificato, il modello viene serializzato e memorizzato in un file binario per poter essere successivamente recuperato e utilizzato per effettuare predizioni.
     \end{justify}
-
-
-\section{Ottimizzazione modelli}
+    
+        \includegraphics[width=1\textwidth]{pics/addestramento.png}
+        \includegraphics[width=1\textwidth]{pics/addestramento2.png}
+      
+\section{Ottimizzazione modelli}\label{ott}
     \begin{justify}
         Com’è noto, ogni tipo di modello, che sia di classificazione o clustering, possiede una serie di parametri, anche detti Iperparametri, che, se opportunamente configurati, permettono di addestrarlo in maniera ottimale e di adattarsi meglio ai dati a disposizione. Ogni modello possiede parametri specifici e la regolazione di essi risulta particolarmente complessa e richiederebbe conoscenze specifiche sul funzionamento dell’algoritmo di addestramento di cui fa uso. Anche assumendo di essere a conoscenza del funzionamento di ciascun algoritmo, risulta comunque complesso e dispendioso dal punto di vista temporale determinare “a mano” i valori per ciascuno dei parametri a disposizione. Per tale motivo, tipicamente si sceglie di addestrare e valutare lo stesso modello, sugli stessi dati, ma con differenti configurazioni dei parametri, determinando poi quale di queste ha conseguito il risultato migliore. 
         La libreria Sklearn mette a disposizione degli strumenti per automatizzare tale processo: GridSearchCV e RandomizedSearchCV. Entrambe le classi operano nello stesso modo: si indica il modello che si intende addestrare e si specifica una lista dei parametri interessati al “tuning” e dei possibili valori da assegnargli e automaticamente essi addestreranno e valuteranno il modello indicato con differenti permutazioni dei valori specificati per i vari parametri. Nello specifico, ciascun modello viene valutato con un approccio Cross – Validation, per aumentare l’affidabilità della valutazione stessa. La differenzia sostanziale tra GridSearch e RandomizedSearch è che il primo addestra e valuta tutti i modelli con tutte le possibili permutazioni di configurazioni specificate, mentre il secondo valuta casualmente soltanto un numero predefinito di queste. Ovviamente il primo approccio è esaustivo e permette di identificare con certezza il miglior modello possibile, a discapito di un’enorme quantità di tempo necessaria per la ricerca. Il secondo, invece, è una ricerca meno esaustiva che punta sulla “fortuna della casualità”, ma permette di ottenere dei risultati, mediamente migliori di una configurazione dei parametri di default, in tempi molto più brevi.
-        Ai fini del nostro progetto, e per le risorse limitate a noi a disposizione, abbiamo comunque deciso di provare ad ottimizzare i nostri modelli ma tramite l’ausilio della RandomizedSearch. C’è da specificare che l’identificazione del miglior modello deve essere fatta sulla base di un punteggio che permetta di determinare quando un modello è migliore di un altro. Nello specifico, per i modelli di classificazione ci si è basati sull’Accuracy, mentre per i modelli di clustering si è usato il Silhouette score. Si tenga inoltre conto del fatto che un approccio di valutazione Cross Validation per modelli di clustering non ha molta utilità e per tale motivo tale tipo di valutazione è stata usata solo per modelli di classificazione. 
-        *immagine (parametri.png) -> Didascalia: Parametri e valori considerati per l’ottimizzazione di alcuni dei modelli di classificazone*
-        *immagine (parametri2.png) -> Didascalia: Parametri e valori considerati per l’ottimizzazione di alcuni dei modelli di clustering*
+        Ai fini del nostro progetto, e per le risorse limitate a noi a disposizione, abbiamo comunque deciso di provare ad ottimizzare i nostri modelli ma tramite l’ausilio della RandomizedSearch. C’è da specificare che l’identificazione del miglior modello deve essere fatta sulla base di un punteggio che permetta di determinare quando un modello è migliore di un altro. Nello specifico, per i modelli di classificazione ci si è basati sull’Accuracy, mentre per i modelli di clustering si è usato il Silhouette score. Si tenga inoltre conto del fatto che un approccio di valutazione Cross Validation per modelli di clustering non ha molta utilità e per tale motivo tale tipo di valutazione è stata usata solo per modelli di classificazione.
+        \end{justify}
+
+        \begin{figure}[H]
+        \includegraphics[width=1\textwidth]{pics/parametri.png}
+        \caption{Parametri e valori considerati per l’ottimizzazione di alcuni dei modelli di classificazione}
+        \end{figure}
+
+        \begin{figure}[H]
+        \includegraphics[width=1\textwidth]{pics/parametri2.png}
+        \caption{Parametri e valori considerati per l’ottimizzazione di alcuni dei modelli di clustering}
+        \end{figure}
+        
+        \begin{justify}
         Si riportano i risultati ottenuti dall’ottimizzazione di un modello di classificazione e uno di clustering
-        Per la classificazione, si è tentata l’ottimizzazione del modello Linear Support Vector: la ricerca ha impiegato all’incirca 1130.68 secondi, ottenendo un punteggio di accuracy di 0.855. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
-        *immagine (classificationReportLinearSVCbest.png)*
-        *immagine (LinearSVCbestconfusionmatrix.png)*
+        Per la classificazione, si è tentata l’ottimizzazione del modello Linear Support Vector: la ricerca ha impiegato all’incirca 1130.68 secondi, ottenendo un punteggio di accuracy di 0.855. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni.
+        \end{justify}
+
+        \includegraphics[width=\linewidth]{pics/classificationReport_LinearSVC_best.png}
+        \includegraphics[width=\linewidth]{pics/LinearSVC_best_confusion_matrix.png}
         
+        \begin{justify}
         Per il clustering, si è tentata l’ottimizzazione del modello K-Means: la ricerca ha impiegato all’incirca 236.51 secondi, ottenendo un Silhouette score di 0.011. Di seguito ne si riportano le Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
-        *immagine (keydesbest.png)*
-        I Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
-        *immagine (keyautbest.PNG)*
+        \end{justify}
+
+        \includegraphics[width=\linewidth]{pics/key_des_best.PNG}
         
+        \begin{justify}
+        I Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
+        \end{justify}
+        
+        \includegraphics[width=\linewidth]{pics/key_aut_best.PNG}
+
+        \begin{justify}
         Confrontando i risultati ottenuti dai modelli “ottimizzati” con le rispettive versioni “non ottimizzate” si può notare come, in effetti, essi non siano tanto migliori e, anzi, hanno raggiunto punteggi simili. La cosa non stupisce considerando che: 
         \begin{itemize}
             \item La ricerca RandomizedSearch è un processo casuale che non garantisce l’ottimalità

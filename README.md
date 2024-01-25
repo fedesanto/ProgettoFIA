@@ -18,4 +18,4 @@ Per l'esecuzione degli script potrebbe essere necessario dover installare sul pr
  - matplotlib, versione 3.8.2
  - joblib, versione 1.3.2
  - nltk, versione 3.8.1
- - wordcloud, 1.9.3
+ - wordcloud, versione 1.9.3

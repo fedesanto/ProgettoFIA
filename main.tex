@@ -352,8 +352,11 @@
     \subsection{Mulinomial Naive Bayes Classification}
     \begin{justify}
         Il classificatore Multinomial Naive Bayes è una tipologia di classificatore probabilistico bayesiano che lavora secondo l’assunzione per cui le caratteristiche predittive siano distribuite secondo una distribuzione multinomiale. Risulta particolarmente adatto nei contesti in cui le caratteristiche degli elementi da predire rappresentano conteggi di occorrenze, tuttavia, nel pratico, anche conteggi frazionari dovrebbero funzionare sufficientemente bene.
-        Il suo addestramento ha impiegato all’incirca 5.14 secondi, ottenendo un punteggio di accuracy di 0.715. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
-        *immagine (classificationReportMultinomialNB.png)*
+        Il suo addestramento ha impiegato all’incirca 5.14 secondi, ottenendo un punteggio di accuracy di 0.715. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni:
+    \end{justify}
+    \includegraphics[width=0.95\textwidth]{pics/classificationReport_MultinomialNB.png}   
+
+    \begin{justify}
         *immagine (MultinomialNBconfusionmatrix.png)*
         Tra tutti i classificatori provati, questo è risultato essere quello più rapido durante l’apprendimento, a discapito, tuttavia, di un punteggio di accuracy e, in generale, di risultati nettamente inferiori rispetto agli altri. Si può notare, infatti, come il modello faccia confusione su diverse categorie, non riuscendo a distinguerle dalle altre (si vedano le predizioni fatte per “Animals” e “Art”). Si noti come le categorie su cui presenta più difficoltà sono di fatto quelle con minor numero di esempi all’interno del dataset, rispecchiando quindi quelle che sono le problematiche principali di un qualsiasi classificatore bayesiano.
     \end{justify}
@@ -378,7 +381,7 @@
         Il suo addestramento ha impiegato all’incirca 7.36 secondi, ottenendo un punteggio di accuracy di 0.854. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
         *immagine (classificationReportLinearSVC.png)*
         *immagine (LinearSVCconfusionmatrix.png)*
-        Si evidenziano immediatamente risultati decisamente migliori rispetto ai modelli precedenti. Il tempo per l’apprendimento è ancora sufficientemente basso e le predizioni sono state molto più accurate e con meno lacune rispetto le categorie meno frequenti. Dal classification report si nota come la categoria “Art” sia quella con lo score minore (f1-score di 0.74), come ci si poteva aspettare dalla classe con meno esempi nel dataset, ma tutto sommato le predizioni effettuate sono abbastanza soddisfacenti. Dalla matrice di confusione è ora possibile notare una tendenza, più evidente rispetto ai modelli precedenti, nel confondere alcune categorie simili. Di fatto un buon numero di libri appartenenti alla categoria “Mistery & Detective” sono stati confusi come “Thriller” (lo stesso vale per il contrario). Osservando i wordcloud delle categorie in questione, sono differenti le parole chiave comuni (Es. “murder”, “killer”): è dunque evidente la difficoltà nella suddivisione netta delle due tipologie di libri ed è una tendenza che ci si aspetta di osservare anche dai successivi classificatori.
+        Si evidenziano immediatamente risultati decisamente migliori rispetto ai modelli precedenti. Il tempo per l’apprendimento è ancora sufficientemente basso e le predizioni sono state molto più accurate e con meno lacune rispetto le categorie meno frequenti. Dal classification report si nota come la categoria “Art” sia quella con lo score minore (f1-score di 0.74), come ci si poteva aspettare dalla classe con meno esempi nel dataset, ma tutto sommato le predizioni effettuate sono abbastanza soddisfacenti. Dalla matrice di confusione è ora possibile notare una tendenza, più evidente rispetto ai modelli precedenti, nel confondere alcune categorie simili. Di fatto un buon numero di libri appartenenti alla categoria “Mistery Detective” sono stati confusi come “Thriller” (lo stesso vale per il contrario). Osservando i wordcloud delle categorie in questione, sono differenti le parole chiave comuni (Es. “murder”, “killer”): è dunque evidente la difficoltà nella suddivisione netta delle due tipologie di libri ed è una tendenza che ci si aspetta di osservare anche dai successivi classificatori.
     \end{justify}
     \end{enumerate}
 
@@ -411,7 +414,7 @@
     Dai risultati ottenuti si evidenzia come i classificatori bayesiani sono del tutto sconsigliabili per problemi di classificazione testuale: seppur abbastanza rapidi nella fase di addestramento, non sembrano adattarsi bene ad uno spazio di esempi con numerose feature e rischiano facilmente di andare in underfitting.
     Procedendo, la classificazione tramite approccio regressivo adottata dal regressore lineare sembra essere sufficientemente adeguata a fornire buoni risultati, tuttavia, la sua scarsa scalabilità a dati di grandi dimensioni lo rendono un algoritmo poco efficiente e facilmente impraticabile. Difatti, nel nostro caso sono stati utilizzati all’incirca 27000 esempi per l’addestramento ma, in casi reali, per produrre una soluzione di machine learning sufficientemente addestrata, tale numero dovrebbe essere molto più grande, il che renderebbe estremamente complesso, per un modello di regressione lineare, arrivare a convergenza.
     Infine, i modelli lineari (Linear Support Vector e SGD) sono risultati assolutamente i migliori: non solo i punteggi ottenuti sono di gran lunga superiori agli altri tipi di modelli ma anche i tempi di addestramento, seppur non i più bassi, sono stati sufficientemente contenuti. Inoltre, sono stati in grado di adattarsi ottimamente ad un dataset piuttosto sbilanciato e fornire predizioni abbastanza accurate per ogni categoria. Per quanto riguarda la scalabilità verso un quantitativo da dati maggiore, dalle documentazioni riportate dalla libreria Sklearn,  l’algoritmo SGD dovrebbe essere progettato e ottimizzato appositamente per lavorare con grandi mole di dati e, per tal motivo, è preferibile rispetto al Linear Support Vector.
-    Si tenga presente che tutti i modelli hanno avuto chiare difficoltà nel distinguere accuratamente categorie con elementi simili, come per “Mystery & Detective” – “Thriller” o “Religion” – “History”. Osservando i relativi wordcloud ci si accorge facilmente di parole chiave comuni che potrebbero indurre in confusioni. Al fine di rendere più netta la divisione tra le categorie, e dunque ottenere dai modelli risultati migliori, si potrebbe pensare di accorpare categorie con elementi simili, com’è già stato fatto per altre categorie precedentemente presenti nel dataset. Tuttavia, si rischierebbe di avere un set di categorie predicibili eccessivamente generiche e, dunque, poco utili nella maggior parte dei contesti pratici.
+    Si tenga presente che tutti i modelli hanno avuto chiare difficoltà nel distinguere accuratamente categorie con elementi simili, come per “Mystery Detective” – “Thriller” o “Religion” – “History”. Osservando i relativi wordcloud ci si accorge facilmente di parole chiave comuni che potrebbero indurre in confusioni. Al fine di rendere più netta la divisione tra le categorie, e dunque ottenere dai modelli risultati migliori, si potrebbe pensare di accorpare categorie con elementi simili, com’è già stato fatto per altre categorie precedentemente presenti nel dataset. Tuttavia, si rischierebbe di avere un set di categorie predicibili eccessivamente generiche e, dunque, poco utili nella maggior parte dei contesti pratici.
     \end{justify}
     \end{enumerate}
 
@@ -489,14 +492,51 @@
     \end{justify}
     \end{enumerate}
 
-\section{Conclusioni}
+    \begin{enumerate}
+    \subsection{Valutazioni finali sul clustering}
     \begin{justify}
-        Il suo addestramento ha impiegato all’incirca 273.08 secondi, ottenendo un Silhouette score di 0.005.Di seguito né si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti
-        Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
-        *immagine descspect.PNG*
-        Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
-        *immagine autspect.PNG*
-        Tra tutti gli algoritmi di clustering provati, questo è stato decisamente il più lento, anche con un margine piuttosto evidente. Ovviamente c’era da aspettarselo poiché, oltre che eseguire il K-Means, lo Spectral Clustering richiede ulteriori operazioni preliminari di costruzione di un grafo e trasformazione di esso in uno spazio di dimensioni inferiori. Nonostante il tempo molto disteso per l’addestramento, il Silhouette score ottenuto risulta essere addirittura peggiore di quello ricavato dal K-Means (seppur di poco). Questa valutazione ci permette di capire che l’algoritmo non è stato in grado di rivelare dei pattern significativi nei dati, difficoltà, evidentemente, introdotta dai vari problemi previsti nella gestione del linguaggio naturale.
+        Dallo studio condotto sui vari modelli di clustering si nota come per ognuno di essi i risultati ottenuti non li rendono effettivamente utilizzabili nella pratica; infatti, la media dei Silhouette score ottenuti si aggira intorno allo zero e le keywords estratte dalle singole analisi non sono funzionali al riconoscimento della categoria di appartenenza del libro. 
+        Nonostante ciò, l’algoritmo che ha portato a risultati migliori, seppur di poco, è stato il K-Means, mentre il più veloce nell’addestramento è stato ovviamente il Mini-Batch K-Means, il che lo rende anche il più propenso a essere adattato a dataset con un numero molto maggiore di dati.
+        Lo Spectral Clustering, invece, non ci ha permesso di giungere a risultati di qualità superiore a causa della rappresentazione stessa dei dati e anche per via del fatto che si tratta di una tecnica tipicamente non utilizzata per dati testuali ma per dati numerici o geometrici, come quelli provenienti da immagini.
     \end{justify}
-    
+    \end{enumerate}
+
+
+\section{Implementazione script per l'addestramento}
+    \begin{justify}
+        Com’è già stato specificato precedentemente, al fine di poter addestrare un modello di machine learnig su dati testuali è stato necessario far ricorso a conteggi in frequenze per convertire le parole in sequenze di valori numerici utilizzabili da algoritmi di apprendimento. Per far ciò è stato necessario ricorrere alla classe ‘TfidfVectorizer’, la quale è autonomamente in grado di estrarre i token costituenti i periodi testuali, contarli e normalizzare i conteggi secondo la tecnica tf-idf (term frequency–inverse document frequency). L’output fornito  da tale processo è una matrice sparsa di valori numerici, costituita da tante colonne quante sono le differenti parole identificate e tante righe quanti sono gli esempi. Per le descrizioni si è deciso di considerare unicamente token costituiti da parole singole, mentre, per gli autori, si è pensato potesse tornare utile considerare anche token costituiti da due parole (quelle che dovrebbero rappresentare nome e cognome dell’autore).
+        *immagine (tfidtransformer.png) *
+        Successivamente, lo script costruisce una pipeline contenente i “vettorizzatori” (istanze di TfidfVectorizer’) per le descrizioni e per gli autori e il modello il cui nome viene specificato da uno dei parametri in input.
+        *immagine (pipeline.png) -> Didascalia: pipeline dei classificatori*
+        *immagine (pipeline2.png) -> Didascalia: pipeline dei clusterer *
+        In seguito, si passa all’addestramento del modello. Se specificato da uno dei parametri in input, si effettua una ricerca dei migliori parametri di configurazione per il modello (vedi paragrafo *numero del paragrafo di ottimizzazione*), portando ad un addestramento molto più lungo, altrimenti si addestra il modello con una configurazione di default. Infine, se specificato, il modello viene serializzato e memorizzato in un file binario per poter essere successivamente recuperato e utilizzato per effettuare predizioni
+        *immagine (addestramento.png)*
+        *immagine (addestramento2.png)*
+    \end{justify}
+
+
+\section{Ottimizzazione modelli}
+    \begin{justify}
+        Com’è noto, ogni tipo di modello, che sia di classificazione o clustering, possiede una serie di parametri, anche detti Iperparametri, che, se opportunamente configurati, permettono di addestrarlo in maniera ottimale e di adattarsi meglio ai dati a disposizione. Ogni modello possiede parametri specifici e la regolazione di essi risulta particolarmente complessa e richiederebbe conoscenze specifiche sul funzionamento dell’algoritmo di addestramento di cui fa uso. Anche assumendo di essere a conoscenza del funzionamento di ciascun algoritmo, risulta comunque complesso e dispendioso dal punto di vista temporale determinare “a mano” i valori per ciascuno dei parametri a disposizione. Per tale motivo, tipicamente si sceglie di addestrare e valutare lo stesso modello, sugli stessi dati, ma con differenti configurazioni dei parametri, determinando poi quale di queste ha conseguito il risultato migliore. 
+        La libreria Sklearn mette a disposizione degli strumenti per automatizzare tale processo: GridSearchCV e RandomizedSearchCV. Entrambe le classi operano nello stesso modo: si indica il modello che si intende addestrare e si specifica una lista dei parametri interessati al “tuning” e dei possibili valori da assegnargli e automaticamente essi addestreranno e valuteranno il modello indicato con differenti permutazioni dei valori specificati per i vari parametri. Nello specifico, ciascun modello viene valutato con un approccio Cross – Validation, per aumentare l’affidabilità della valutazione stessa. La differenzia sostanziale tra GridSearch e RandomizedSearch è che il primo addestra e valuta tutti i modelli con tutte le possibili permutazioni di configurazioni specificate, mentre il secondo valuta casualmente soltanto un numero predefinito di queste. Ovviamente il primo approccio è esaustivo e permette di identificare con certezza il miglior modello possibile, a discapito di un’enorme quantità di tempo necessaria per la ricerca. Il secondo, invece, è una ricerca meno esaustiva che punta sulla “fortuna della casualità”, ma permette di ottenere dei risultati, mediamente migliori di una configurazione dei parametri di default, in tempi molto più brevi.
+        Ai fini del nostro progetto, e per le risorse limitate a noi a disposizione, abbiamo comunque deciso di provare ad ottimizzare i nostri modelli ma tramite l’ausilio della RandomizedSearch. C’è da specificare che l’identificazione del miglior modello deve essere fatta sulla base di un punteggio che permetta di determinare quando un modello è migliore di un altro. Nello specifico, per i modelli di classificazione ci si è basati sull’Accuracy, mentre per i modelli di clustering si è usato il Silhouette score. Si tenga inoltre conto del fatto che un approccio di valutazione Cross Validation per modelli di clustering non ha molta utilità e per tale motivo tale tipo di valutazione è stata usata solo per modelli di classificazione. 
+        *immagine (parametri.png) -> Didascalia: Parametri e valori considerati per l’ottimizzazione di alcuni dei modelli di classificazone*
+        *immagine (parametri2.png) -> Didascalia: Parametri e valori considerati per l’ottimizzazione di alcuni dei modelli di clustering*
+        Si riportano i risultati ottenuti dall’ottimizzazione di un modello di classificazione e uno di clustering
+        Per la classificazione, si è tentata l’ottimizzazione del modello Linear Support Vector: la ricerca ha impiegato all’incirca 1130.68 secondi, ottenendo un punteggio di accuracy di 0.855. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni
+        *immagine (classificationReportLinearSVCbest.png)*
+        *immagine (LinearSVCbestconfusionmatrix.png)*
+        
+        Per il clustering, si è tentata l’ottimizzazione del modello K-Means: la ricerca ha impiegato all’incirca 236.51 secondi, ottenendo un Silhouette score di 0.011. Di seguito ne si riportano le Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster:
+        *immagine (keydesbest.png)*
+        I Top 10 autori più frequenti contenuti negli elementi di ogni cluster:
+        *immagine (keyautbest.PNG)*
+        
+        Confrontando i risultati ottenuti dai modelli “ottimizzati” con le rispettive versioni “non ottimizzate” si può notare come, in effetti, essi non siano tanto migliori e, anzi, hanno raggiunto punteggi simili. La cosa non stupisce considerando che: 
+        \begin{itemize}
+            \item La ricerca RandomizedSearch è un processo casuale che non garantisce l’ottimalità
+            \item Non avendo conoscenze dettagliate sul funzionamento tecnico degli algoritmi in questione, probabilmente la lista dei parametri indicati e i rispettivi valori specificati potrebbero non essere adatti, o comunque, potrebbero essere specificati valori maggiormente sensati
+            \item Non è da escludere la possibilità per cui le configurazioni predefinite, usate per le versioni “non ottimizzate” dei modelli, siano già efficaci a ottenere il miglior risultato possibile utilizzando i dati disponibili.
+        \end{itemize}
+    \end{justify}
 \end{document}

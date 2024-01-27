@@ -188,7 +188,7 @@
     Per ogni riga vengono svolte le seguenti azioni:
     \begin{itemize}
         \item estrarre tutte le categorie separate da ',';
-        \item se nessuna delle categorie estratte appartiene a 'toExtract', allora la riga viene eliminata;
+        \item se nessuna delle categorie estratte appartiene a 'toExtract', la riga viene eliminata;
         \item tra le categorie che fanno parte di 'toExtact', viene assegnato al campo "Category" quella che ha meno esempi nel dataframe.
     \end{itemize}
     \end{justify}
@@ -582,10 +582,13 @@
         \item Una volta ottenuto lo spazio trasformato, viene applicato un algoritmo di clustering, come ad esempio K-Means, per raggruppare i punti in cluster;
         \item I risultati dell'algoritmo di clustering vengono utilizzati per assegnare ciascun punto del dataset a un cluster specifico. La coerenza e la separazione dei cluster dipendono dalla capacità della trasformazione spettrale di rivelare pattern significativi nei dati.
     \end{enumerate}
-    Il suo addestramento ha impiegato all’incirca 273.08 secondi, ottenendo un Silhouette score di 0.005. Di seguito ne si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti.
+    Il suo addestramento ha impiegato all’incirca 273.08 secondi, ottenendo un Silhouette score di 0.005. 
+    \end{justify}
+    \newpage
+    \begin{justify}
+    Di seguito ne si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti.
     \end{justify}
 
-    \hfill
 
     \begin{figure}[H]
     \includegraphics[width=0.90\textwidth]{pics/desc_spect.PNG}
@@ -645,17 +648,20 @@
         \begin{figure}[H]
         \centering
         \includegraphics[width=1\textwidth]{pics/addestramento.png}
+        \caption{Addestramento Classificazione}
+        \end{figure}
+        \begin{figure}[H]
         \includegraphics[width=1\textwidth]{pics/addestramento2.png}
+        \caption{Addestramento Clustering}
         \end{figure}
         
         \end{justify}
 
+\newpage
 \section{Ottimizzazione modelli}\label{ott}
     \begin{justify}
-        Com’è noto, ogni tipo di modello, che sia di classificazione o clustering, possiede una serie di parametri. Questi parametri sono noti come iperparametri e, anche se opportunamente configurati, permettono di addestrare il modello in maniera ottimale e di adattarsi meglio ai dati a disposizione. Ogni modello possiede parametri specifici e la regolazione di essi risulta particolarmente complessa e richiederebbe conoscenze specifiche sul funzionamento dell’algoritmo di addestramento di cui fa uso. Anche assumendo di essere a conoscenza del funzionamento di ciascun algoritmo, risulta comunque complesso e dispendioso dal punto di vista temporale determinare “a mano” i valori per ciascuno dei parametri a disposizione.
-        \end{justify}
-    \newpage
-        \begin{justify}
+        Com’è noto, ogni tipo di modello, che sia di classificazione o clustering, possiede una serie di parametri. Questi parametri sono noti come iperparametri e, se opportunamente configurati, permettono di addestrare il modello in maniera ottimale e di adattarsi meglio ai dati a disposizione.
+        Ogni modello possiede parametri specifici e la regolazione di essi risulta particolarmente complessa e richiederebbe conoscenze specifiche sul funzionamento dell’algoritmo di addestramento di cui fa uso. Anche assumendo di essere a conoscenza del funzionamento di ciascun algoritmo, risulta comunque complesso e dispendioso dal punto di vista temporale determinare “a mano” i valori per ciascuno dei parametri a disposizione.
         Per tale motivo, tipicamente si sceglie di addestrare e valutare lo stesso modello, sugli stessi dati, ma con differenti configurazioni dei parametri, determinando poi quale di queste ha conseguito il risultato migliore. 
         La libreria Sklearn mette a disposizione degli strumenti per automatizzare tale processo: GridSearchCV e RandomizedSearchCV. Entrambe le classi operano nello stesso modo: si indica il modello che si intende addestrare e si specifica una lista dei parametri interessati al “tuning” e dei possibili valori da assegnargli e automaticamente essi addestreranno e valuteranno il modello indicato con differenti permutazioni dei valori specificati per i vari parametri. Nello specifico, ciascun modello viene valutato con un approccio Cross – Validation, per aumentare l’affidabilità della valutazione stessa. La differenza sostanziale tra GridSearch e RandomizedSearch è che il primo addestra e valuta tutti i modelli con tutte le possibili permutazioni di configurazioni specificate mentre il secondo valuta casualmente soltanto un numero predefinito di queste. Ovviamente il primo approccio è esaustivo e permette di identificare con certezza il miglior modello possibile, a discapito di un’enorme quantità di tempo necessaria per la ricerca. Il secondo, invece, è una ricerca meno esaustiva che punta sulla “fortuna della casualità”, ma permette di ottenere dei risultati mediamente migliori di una configurazione dei parametri di default e in tempi molto più brevi.
         Ai fini del nostro progetto, e per le risorse limitate a noi a disposizione, abbiamo comunque deciso di provare ad ottimizzare i nostri modelli ma tramite l’ausilio della RandomizedSearch. C’è da specificare che l’identificazione del miglior modello deve essere fatta sulla base di un punteggio che permetta di determinare quando un modello è migliore di un altro. Nello specifico, per i modelli di classificazione ci si è basati sull’Accuracy, mentre per i modelli di clustering si è usato il Silhouette score. Si tenga conto che un approccio di valutazione Cross Validation, per modelli di clustering, non ha molta utilità e per tale motivo questo tipo di valutazione è stata usata solo per modelli di classificazione.
@@ -672,35 +678,38 @@
         \captionsetup{width=0.70\textwidth, justification=centering}
         \caption{Parametri e valori considerati per l’ottimizzazione di alcuni dei modelli di clustering}
         \end{figure}
-        
+
+
         \begin{justify}
         Si riportano i risultati ottenuti dall’ottimizzazione di un modello di classificazione e uno di clustering.
         Per la classificazione, si è tentata l’ottimizzazione del modello Linear Support Vector: la ricerca ha impiegato all’incirca 1130.68 secondi ottenendo un punteggio di accuracy di 0.855. Di seguito ne si riporta il suo classification report e la matrice di confusione delle predizioni:
         \end{justify}
 
         \centering
-        \includegraphics[width=0.80\linewidth]{pics/classificationReport_LinearSVC_best.png}
+        \includegraphics[width=0.70\linewidth]{pics/classificationReport_LinearSVC_best.png}
         
         \includegraphics[width=0.80\linewidth]{pics/LinearSVC_best_confusion_matrix.png}
         
         \begin{justify}
-        Per il clustering, si è tentata l’ottimizzazione del modello K-Means: la ricerca ha impiegato all’incirca 236.51 secondi ottenendo un Silhouette score di 0.011.
+        Per il clustering, si è tentata l’ottimizzazione del modello K-Means: la ricerca ha impiegato all’incirca 236.51 secondi ottenendo un Silhouette score di 0.011. \\Di seguito ne si riportano le top 10 keywords più frequenti contenute nelle descrizioni e i top 10 autori più frequenti.
         \end{justify}
 
         \begin{figure}[H]
-        \includegraphics[width=0.70\linewidth]{pics/key_des_best.PNG}
-        \captionsetup{width=0.70\textwidth, justification=centering}
+        \includegraphics[width=0.80\linewidth]{pics/key_des_best.PNG}
+        \captionsetup{width=0.80\textwidth, justification=centering}
         \caption{Top 10 keywords più frequenti contenute nelle descrizioni degli elementi di ogni cluster}
         \end{figure}
 
         \begin{figure}[H]
-        \includegraphics[width=0.70\linewidth]{pics/key_aut_best.PNG}
-        \captionsetup{width=0.70\textwidth, justification=centering}
-        \caption{Top 10 autori più frequenti contenuti negli elementi di ogni cluster}
+        \includegraphics[width=0.80\linewidth]{pics/key_aut_best.PNG}
+        \captionsetup{width=0.80\textwidth, justification=centering}
+        \caption{Top 10 autori più frequenti contenuti negli elementi\\ di ogni cluster}
         \end{figure}
 
+\newpage
         \begin{justify}
-        Confrontando i risultati ottenuti dai modelli “ottimizzati” con le rispettive versioni “non ottimizzate” si può notare come, in effetti, essi non siano tanto migliori e, anzi, hanno raggiunto punteggi simili. L'esito non stupisce considerando che: 
+        Confrontando i risultati ottenuti dai modelli “ottimizzati” con le rispettive versioni “non ottimizzate” si può notare come, in effetti, essi non siano tanto migliori e, anzi, hanno raggiunto punteggi simili.\\
+        L'esito non stupisce considerando che: 
         \begin{itemize}
             \item La ricerca RandomizedSearch è un processo casuale che non garantisce l’ottimalità;
             \item Non avendo conoscenze dettagliate sul funzionamento tecnico degli algoritmi in questione, probabilmente la lista dei parametri indicati e i rispettivi valori specificati potrebbero non essere adatti, o comunque, potrebbero essere specificati valori maggiormente sensati;
@@ -718,8 +727,33 @@
         \begin{justify}
         Questi risultati sottolineano chiaramente che, nel nostro contesto di categorizzazione dei libri, la metodologia più adatta è la classificazione. Quest’approccio, infatti, offre modelli specificamente progettati per lavorare su dati testuali garantendo una maggiore precisione e pertinenza rispetto al clustering, in cui si utilizzano approcci più generici e meno specifici per la gestione di dati in linguaggio naturale. 
     \end{justify}
+    
 
-    \begin{textblock*}{8cm}(12cm,22cm)
+\newpage
+\begin{enumerate}
+    \section{Contributi}
+    \begin{justify}
+    Per definire l'obiettivo del progetto, la scelta del dataset e le operazioni di Data Preparation sono stati svolti incontri di gruppo. Successivamente ogni componente del gruppo ha dato un contributo specifico in determinati ambiti.\\
+    Di seguito la tabella dei contributi:
+    \end{justify}
+    
+    \begin{tabular}{ | p{4.5cm} | p{9cm} | }
+    %\begin{tabular}{|c|c|}
+    \hline
+    Mancuso Maria Angela & Sviluppo della documentazione\\
+    \hline
+    Malfettone Ines & Sviluppo della documentazione\\
+    \hline
+    Santonicola Federico & Addestramento e valutazione Classificatori\\
+    \hline
+    Sessa Attilio Marco & Addestramento e valutazione Clusterers\\
+    \hline
+    \end{tabular}
+\end{enumerate}
+
+
+
+\begin{textblock*}{8cm}(12cm,23cm)
     Mancuso Maria Angela 0612705832\\
     Malfettone Ines 0612705311\\
     Santonicola Federico 0612706449\\
